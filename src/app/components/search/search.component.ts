@@ -1,21 +1,23 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { GamesService } from '../../services/games.service';
-import { of } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { Observable, of } from 'rxjs';
+import { AsyncPipe, JsonPipe, NgOptimizedImage } from '@angular/common';
+import { Game } from '../../model/games.interfaces';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, JsonPipe, FormsModule, NgOptimizedImage],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
   gamesService = inject(GamesService);
+  gameName = '';
+  searchResults$: Observable<Game[]> = of([]);
 
-  searchResults$ = of([]);
-
-  ngOnInit(): void {
-    this.searchResults$ = this.gamesService.getGamesByName('"The Witcher"');
+  searchGamesByName(): void {
+    this.searchResults$ = this.gamesService.getGamesByName(this.gameName);
   }
 }

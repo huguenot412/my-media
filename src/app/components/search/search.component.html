@@ -1,8 +1,25 @@
-<input type="search">
-<pre>
-  {{ searchResults$ | async }}
-</pre>
 
-<!-- @for (result of searchResults$ | async; track $index) {
-  <p>{{result.name}}</p>
-} -->
+<form
+  #searchForm="ngForm"
+  (ngSubmit)="searchGamesByName()"
+  >
+  <input type="search" [(ngModel)]="gameName" name="gameName">
+</form>
+<!-- <pre>
+  {{ searchResults$ | async | json }}
+</pre> -->
+
+@if(gameName) {
+  @for (result of searchResults$ | async; track $index) {
+    <p>{{ result.name }}</p>
+    @if (result.cover.url) {
+      <div class="cover-art-container">
+        <img class="cover-art" [ngSrc]="result.cover.url.replace('t_thumb', 't_cover_big')" alt="Cover Art" fill priority>
+      </div>
+    }
+  }
+}
+@else {
+  <p>Search for games by their name</p>
+}
+

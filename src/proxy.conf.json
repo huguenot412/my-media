@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "https://api.igdb.com",
+    "changeOrigin": true,
+    "pathRewrite": { "^/api": "" }
+  }
+}
