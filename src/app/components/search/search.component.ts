@@ -4,6 +4,8 @@ import { Observable, of } from 'rxjs';
 import { AsyncPipe, JsonPipe, NgOptimizedImage } from '@angular/common';
 import { Game } from '../../model/games.interfaces';
 import { FormsModule } from '@angular/forms';
+import { GameListsStore } from '../../store/game-lists.store';
+import { GamesStore } from '../../store/games.store';
 
 @Component({
   selector: 'app-search',
@@ -14,10 +16,16 @@ import { FormsModule } from '@angular/forms';
 })
 export class SearchComponent {
   gamesService = inject(GamesService);
+  gameListsStore = inject(GameListsStore);
+  gamesStore = inject(GamesStore);
   gameName = '';
   searchResults$: Observable<Game[]> = of([]);
 
   searchGamesByName(): void {
     this.searchResults$ = this.gamesService.getGamesByName(this.gameName);
+  }
+
+  addGame(game: Game, listId: string): void {
+    this.gamesStore.addGame(game, listId);
   }
 }

@@ -1,0 +1,11 @@
+.lists-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.list {
+  padding: 10px;
+  border: 1px solid #efefef;
+  width: 300px;
+}

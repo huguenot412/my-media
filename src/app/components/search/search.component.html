@@ -10,12 +10,24 @@
 </pre> -->
 
 @if(gameName) {
-  @for (result of searchResults$ | async; track $index) {
-    <p>{{ result.name }}</p>
-    @if (result.cover.url) {
+  @for (game of searchResults$ | async; track $index) {
+    <p>{{ game.name }}</p>
+    @if (game.cover?.url) {
       <div class="cover-art-container">
-        <img class="cover-art" [ngSrc]="result.cover.url.replace('t_thumb', 't_cover_big')" alt="Cover Art" fill priority>
+        <img class="cover-art" [ngSrc]="game.cover?.url!.replace('t_thumb', 't_cover_big')" alt="Cover Art" fill priority>
       </div>
+    }
+    <button (click)="addGame(game, 'playing')">Playing</button>
+    <button (click)="addGame(game, 'played')">Played</button>
+    <button (click)="addGame(game, 'backlog')">Backlog</button>
+
+    @if (gameListsStore.userCreatedLists().length) {
+      <label for="lists">Add to:</label>
+      <select name="lists" id="lists">
+        @for (list of gameListsStore.userCreatedLists(); track list.id) {
+          <option [value]="list" (click)="addGame(game, list.id)">{{ list.name }}</option>
+        }
+      </select>
     }
   }
 }
