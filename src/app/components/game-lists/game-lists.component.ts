@@ -1,93 +1,22 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { GameListsStore } from '../../store/game-lists.store';
-import { GameList, GameListMetadata } from '../../model/games.interfaces';
+import { GameListMetadata } from '../../model/games.interfaces';
 import { FormsModule } from '@angular/forms';
 import { GamesStore } from '../../store/games.store';
-
-const DEFAULT_GAME_LISTS: GameList[] = [
-  {
-    name: 'Played',
-    games: [],
-    id: 'played',
-    owner: {
-      name: 'Chris Snow',
-      id: 'chris_snow',
-    },
-  },
-  {
-    name: 'Playing',
-    games: [
-      {
-        name: "Marvel's Midnight Suns",
-        id: Math.random(),
-      },
-      {
-        name: 'Black Myth: Wukong',
-        id: Math.random(),
-      },
-      {
-        name: 'Mario + Rabbids: Kingdom Battle',
-        id: Math.random(),
-      },
-    ],
-    id: 'playing',
-    owner: {
-      name: 'Chris Snow',
-      id: 'chris_snow',
-    },
-  },
-  {
-    name: 'Backlog',
-    games: [],
-    id: 'backlog',
-    owner: {
-      name: 'Chris Snow',
-      id: 'chris_snow',
-    },
-  },
-];
+import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'app-game-lists',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SearchComponent, RouterLink],
   templateUrl: './game-lists.component.html',
   styleUrl: './game-lists.component.scss',
 })
-export class GameListsComponent implements OnInit {
+export class GameListsComponent {
   gameListsStore = inject(GameListsStore);
   gamesStore = inject(GamesStore);
   newListName = '';
-  defaultGameLists: GameListMetadata[] = [
-    {
-      name: 'Played',
-      id: 'played',
-      owner: {
-        name: 'Chris Snow',
-        id: 'chris_snow',
-      },
-    },
-    {
-      name: 'Playing',
-      id: 'playing',
-      owner: {
-        name: 'Chris Snow',
-        id: 'chris_snow',
-      },
-    },
-    {
-      name: 'Backlog',
-      id: 'backlog',
-      owner: {
-        name: 'Chris Snow',
-        id: 'chris_snow',
-      },
-    },
-  ];
-
-  ngOnInit(): void {
-    this.gameListsStore.addGameLists(this.defaultGameLists);
-  }
 
   addList(name: string): void {
     const list: GameListMetadata = {
@@ -97,9 +26,14 @@ export class GameListsComponent implements OnInit {
         name: 'Chris Snow',
         id: 'chris_snow',
       },
+      type: 'user',
     };
 
     this.gameListsStore.addList(list);
+  }
+
+  deleteList(listId: string): void {
+    this.gameListsStore.deleteList(listId);
   }
 
   deleteGameFromList(gameId: number, listId: string): void {

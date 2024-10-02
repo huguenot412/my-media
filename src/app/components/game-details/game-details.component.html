@@ -1,0 +1,46 @@
+@for (game of game$ | async; track $index) {
+  <div class="cover-art-container">
+    <img class="cover-art" [ngSrc]="game.cover?.url!.replace('t_thumb', 't_cover_big_2x')" alt="Cover Art" fill priority>
+  </div>
+  <h1>{{ game.name }}</h1>
+  <dl>
+    <dt><p>Summary</p></dt>
+    <dd><p>{{ game.summary }}</p></dd>
+
+    <dt><p>Release Date</p></dt>
+    <dd><p>{{ game.first_release_date! * 1000 | date: 'shortDate' }}</p></dd>
+
+    <dt><p>Genres</p></dt>
+    @for (genre of game.genres; track genre.id) {
+      <dd><p>{{ genre.name }}</p></dd>
+    }
+
+    <dt><p>Game Modes</p></dt>
+    @for (mode of game.game_modes; track mode.id) {
+      <dd>{{ mode.name }}</dd>
+    }
+
+    <dt><p>Developer(s)</p></dt>
+    @for (company of game.involved_companies; track company.id) {
+      @if(company.developer) {
+      <dd><p>{{ company.company.name }}</p></dd>
+      }
+    }
+
+    <dt><p>Available Platforms</p></dt>
+    <div class="platforms">
+      @for (platform of game.platforms; track platform.id) {
+        <dd>
+          <div class="platform-logo-container">
+            <img class="platform-logo" [ngSrc]="platform.platform_logo.url!.replace('t_thumb', 't_original')" alt="Platform logo" fill >
+          </div>
+        </dd>
+      }
+    </div>
+
+    <dt><p>Average Critic Rating</p></dt>
+    <dd><p>{{ game.total_rating | number: '1.0-0' }}</p></dd>
+  </dl>
+
+}
+

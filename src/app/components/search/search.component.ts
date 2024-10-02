@@ -18,11 +18,12 @@ export class SearchComponent {
   gamesService = inject(GamesService);
   gameListsStore = inject(GameListsStore);
   gamesStore = inject(GamesStore);
-  gameName = '';
+  searchQuery = '';
   searchResults$: Observable<Game[]> = of([]);
 
   searchGamesByName(): void {
-    this.searchResults$ = this.gamesService.getGamesByName(this.gameName);
+    this.searchResults$ = this.gamesService.getGamesByName(this.searchQuery);
+    this.searchQuery = '';
   }
 
   addGame(game: Game, listId: string): void {

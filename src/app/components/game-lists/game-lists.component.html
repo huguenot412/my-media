@@ -1,23 +1,31 @@
-<h1>Lists</h1>
+<app-search />
 
-<div class="lists-container">
-  @for (list of gameListsStore.gameLists(); track list.id) {
-    <div class="list">
-      <h2>{{ list.name }}</h2>
+<div>
+  <h1>Lists</h1>
 
-      @if(list.games.length) {
-        @for (game of list.games; track game.id) {
-          <p>{{ game.name }}</p>
-          <button (click)="deleteGameFromList(game.id, list.id)">Delete</button>
+  <div class="lists-container">
+    @for (list of gameListsStore.gameLists(); track list.id) {
+      <div class="list">
+        <h2>{{ list.name }}</h2>
+
+        @if(list.games.length) {
+          @for (game of list.games; track game.id) {
+            <p [routerLink]="['../game', game.id]">{{ game.name }}</p>
+            <button (click)="deleteGameFromList(game.id, list.id)">Delete</button>
+          }
+        } @else {
+          <p>No games currently in list</p>
         }
-      } @else {
-        <p>No games currently in list</p>
-      }
-    </div>
-  }
-</div>
 
-<input [(ngModel)]="newListName" name="newListName"/>
-<button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button>
+        @if (list.type == 'user') {
+          <button (click)="deleteList(list.id)">Delete list</button>
+        }
+      </div>
+    }
+  </div>
+
+  <input [(ngModel)]="newListName" name="newListName"/>
+  <button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button>
+</div>
 
 

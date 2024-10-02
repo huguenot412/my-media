@@ -43,12 +43,7 @@ export const GameListsStore = signalStore(
         return gameLists;
       }),
       userCreatedLists: computed(() =>
-        gameListsMetadata().filter(
-          (list) =>
-            list.id !== 'played' &&
-            list.id !== 'playing' &&
-            list.id !== 'backlog'
-        )
+        gameListsMetadata().filter((list) => list.type === 'user')
       ),
     };
   }),
@@ -63,6 +58,13 @@ export const GameListsStore = signalStore(
     addList(list: GameListMetadata): void {
       patchState(store, {
         gameListsMetadata: [...store.gameListsMetadata(), list],
+      });
+    },
+    deleteList(listId: string): void {
+      patchState(store, {
+        gameListsMetadata: [
+          ...store.gameListsMetadata().filter((list) => list.id !== listId),
+        ],
       });
     },
   }))

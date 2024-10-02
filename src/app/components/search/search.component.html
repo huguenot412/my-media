@@ -3,13 +3,10 @@
   #searchForm="ngForm"
   (ngSubmit)="searchGamesByName()"
   >
-  <input type="search" [(ngModel)]="gameName" name="gameName">
+  <input type="search" [(ngModel)]="searchQuery" name="searchQuery">
 </form>
-<!-- <pre>
-  {{ searchResults$ | async | json }}
-</pre> -->
 
-@if(gameName) {
+@if(searchResults$ | async) {
   @for (game of searchResults$ | async; track $index) {
     <p>{{ game.name }}</p>
     @if (game.cover?.url) {
@@ -25,6 +22,7 @@
       <label for="lists">Add to:</label>
       <select name="lists" id="lists">
         @for (list of gameListsStore.userCreatedLists(); track list.id) {
+          <option value="" disabled selected>--Choose a list--</option>
           <option [value]="list" (click)="addGame(game, list.id)">{{ list.name }}</option>
         }
       </select>

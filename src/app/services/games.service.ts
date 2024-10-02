@@ -24,4 +24,15 @@ export class GamesService {
       { headers: this.headers }
     );
   }
+
+  getGameDetails(gameId: string): Observable<Game[]> {
+    const body = `
+      fields *, cover.url, first_release_date, game_modes.name, genres.name, involved_companies.company.name, involved_companies.developer, platforms.name, platforms.platform_logo.url;
+      where id = ${gameId};
+    `;
+
+    return this.http.post<Game[]>(this.baseUrl + 'games', body, {
+      headers: this.headers,
+    });
+  }
 }
