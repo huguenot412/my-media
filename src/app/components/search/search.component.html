@@ -1,25 +1,32 @@
 
-<form
-  #searchForm="ngForm"
-  (ngSubmit)="searchGamesByName()"
-  >
-  <input type="search" [(ngModel)]="gameName" name="gameName">
-</form>
-<!-- <pre>
-  {{ searchResults$ | async | json }}
-</pre> -->
 
-@if(gameName) {
-  @for (result of searchResults$ | async; track $index) {
-    <p>{{ result.name }}</p>
-    @if (result.cover.url) {
+<input [(ngModel)]="searchQuery" name="searchQuery" (ngModelChange)="onInputChange()" placeholder="Search games by name">
+
+
+@let searchResults = searchResults$ | async;
+
+@if (!searchResults?.length && searchQuery) {
+  <p>Loading...</p>
+} @else {
+  @for (game of searchResults; track $index) {
+    <p>{{ game.name }}</p>
+    @if (game.cover?.url) {
       <div class="cover-art-container">
-        <img class="cover-art" [ngSrc]="result.cover.url.replace('t_thumb', 't_cover_big')" alt="Cover Art" fill priority>
+        <img class="cover-art" [ngSrc]="game.cover?.url!.replace('t_thumb', 't_cover_big')" alt="Cover Art" fill>
       </div>
     }
+    <button (click)="addGame(game, 'playing')">Playing</button>
+    <button (click)="addGame(game, 'played')">Played</button>
+    <button (click)="addGame(game, 'backlog')">Backlog</button>
+
+    @if (gameListsStore.userCreatedLists().length) {
+      <select name="lists" id="lists">
+        <option value="" disabled selected>--Choose a list--</option>
+        @for (list of gameListsStore.userCreatedLists(); track list.id) {
+          <option [value]="list" (click)="addGame(game, list.id)">{{ list.name }}</option>
+        }
+      </select>
+    }
   }
-}
-@else {
-  <p>Search for games by their name</p>
 }
 

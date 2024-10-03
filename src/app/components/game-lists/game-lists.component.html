@@ -1,0 +1,30 @@
+<app-search />
+
+<div>
+  <h1>Lists</h1>
+
+  <div class="lists-container">
+    @for (list of gameListsStore.gameLists(); track list.id) {
+      <div class="list">
+        <h2>{{ list.name }}</h2>
+
+        @if(list.games.length) {
+          @for (game of list.games; track game.id) {
+            <app-game-list-item [game]="game" [listId]="list.id"/>
+          }
+        } @else {
+          <p>No games currently in list</p>
+        }
+
+        @if (list.type == 'user') {
+          <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list.id)" />
+        }
+      </div>
+    }
+  </div>
+
+  <input [(ngModel)]="newListName" name="newListName"/>
+  <button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button>
+</div>
+
+

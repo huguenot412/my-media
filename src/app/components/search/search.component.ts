@@ -4,6 +4,10 @@ import { Observable, of } from 'rxjs';
 import { AsyncPipe, JsonPipe, NgOptimizedImage } from '@angular/common';
 import { Game } from '../../model/games.interfaces';
 import { FormsModule } from '@angular/forms';
+import { GameListsStore } from '../../store/game-lists.store';
+import { GamesStore } from '../../store/games.store';
+import { debounceTime, Subject, Subscription } from 'rxjs';
+import { OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-search',
@@ -12,12 +16,40 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
-export class SearchComponent {
+export class SearchComponent implements OnDestroy {
   gamesService = inject(GamesService);
-  gameName = '';
+  gameListsStore = inject(GameListsStore);
+  gamesStore = inject(GamesStore);
+  searchQuery = '';
   searchResults$: Observable<Game[]> = of([]);
+  searchSubject$ = new Subject<void>();
+  searchSubjectSub!: Subscription;
+
+  constructor() {
+    this.searchSubjectSub = this.searchSubject$
+      .pipe(debounceTime(300))
+      .subscribe(() => {
+        this.searchResults$ = this.gamesService.getGamesByName(
+          this.searchQuery
+        );
+      });
+  }
 
   searchGamesByName(): void {
-    this.searchResults$ = this.gamesService.getGamesByName(this.gameName);
+    if (!this.searchQuery) return;
+
+    this.searchResults$ = this.gamesService.getGamesByName(this.searchQuery);
+  }
+
+  addGame(game: Game, listId: string): void {
+    this.gamesStore.addGame(game, listId);
+  }
+
+  onInputChange(): void {
+    this.searchSubject$.next();
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubjectSub.unsubscribe();
   }
 }

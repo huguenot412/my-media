@@ -1,0 +1,14 @@
+<div class="game-name">
+  <div class="cover-art-container">
+    <img class="cover-art" [ngSrc]="game().cover?.url!" alt="Cover Art" fill>
+  </div>
+  <p [routerLink]="['../game', game().id]">{{ game().name }}</p>
+  <fa-icon
+  class="trash"
+  [icon]="faTrash"
+  (click)="deleteGameFromList(game().id, listId())"
+/>
+</div>
+<app-rating [rating]="game().rating" [gameId]="game().id"/>
+<textarea [(ngModel)]="note" (ngModelChange)="updateGameNote(game().id, note)">{{ note }}</textarea>
+

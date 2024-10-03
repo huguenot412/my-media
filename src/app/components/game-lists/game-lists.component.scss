@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  gap: 20px;
+}
+
+.lists-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.list {
+  padding: 10px;
+  border: 1px solid #efefef;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.trash {
+  color: #333;
+
+  &:hover {
+    color: #ff4747;
+  }
+}

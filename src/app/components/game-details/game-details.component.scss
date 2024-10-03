@@ -1,0 +1,22 @@
+.cover-art, .platform-logo {
+  object-fit: contain;
+}
+
+.cover-art-container {
+  position: relative;
+  width: 600px;
+  height: 600px;
+}
+
+.platform-logo-container {
+  position: relative;
+  height: 100px;
+  width: 100px;
+}
+
+.platforms {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+}
