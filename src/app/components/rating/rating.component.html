@@ -1,0 +1,9 @@
+@for (star of stars(); track $index) {
+  <fa-icon
+    [ngClass]="{'active': $index + 1 <= rating().score}"
+    class="star"
+    [icon]="faStar"
+    (click)="updateGameRating(gameId(), $index + 1)"
+  />
+}
+

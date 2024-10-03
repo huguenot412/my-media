@@ -5,11 +5,22 @@ import { GameListMetadata } from '../../model/games.interfaces';
 import { FormsModule } from '@angular/forms';
 import { GamesStore } from '../../store/games.store';
 import { SearchComponent } from '../search/search.component';
+import { RatingComponent } from '../rating/rating.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { GameListItemComponent } from '../game-list-item/game-list-item.component';
 
 @Component({
   selector: 'app-game-lists',
   standalone: true,
-  imports: [FormsModule, SearchComponent, RouterLink],
+  imports: [
+    FormsModule,
+    SearchComponent,
+    RouterLink,
+    RatingComponent,
+    FontAwesomeModule,
+    GameListItemComponent,
+  ],
   templateUrl: './game-lists.component.html',
   styleUrl: './game-lists.component.scss',
 })
@@ -17,6 +28,7 @@ export class GameListsComponent {
   gameListsStore = inject(GameListsStore);
   gamesStore = inject(GamesStore);
   newListName = '';
+  faTrash = faTrash;
 
   addList(name: string): void {
     const list: GameListMetadata = {
@@ -34,9 +46,5 @@ export class GameListsComponent {
 
   deleteList(listId: string): void {
     this.gameListsStore.deleteList(listId);
-  }
-
-  deleteGameFromList(gameId: number, listId: string): void {
-    this.gamesStore.removeGameFromList(gameId, listId);
   }
 }

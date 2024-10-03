@@ -54,8 +54,15 @@ export interface Game {
   game_modes: GameMode[];
 }
 
+export interface Rating {
+  score: number;
+  total: number;
+}
+
 export interface UserGame extends Game {
   lists: string[];
+  rating: Rating;
+  note: string;
 }
 
 export interface ListOwner {
@@ -73,5 +80,5 @@ export interface GameListMetadata {
 }
 
 export interface GameList extends GameListMetadata {
-  games: Game[];
+  games: UserGame[];
 }

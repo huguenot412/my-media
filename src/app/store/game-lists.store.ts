@@ -6,12 +6,6 @@ import {
   withState,
 } from '@ngrx/signals';
 import { Game, GameList, GameListMetadata } from '../model/games.interfaces';
-import {
-  addEntities,
-  addEntity,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
 import { computed, inject } from '@angular/core';
 import { GamesStore } from './games.store';
 

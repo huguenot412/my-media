@@ -1,0 +1,12 @@
+:host {
+  --star-gold: #ffcc33;
+}
+
+.star {
+  color: #898989;
+  cursor: pointer;
+}
+
+.active {
+  color: var(--star-gold);
+}

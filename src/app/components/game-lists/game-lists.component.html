@@ -10,15 +10,14 @@
 
         @if(list.games.length) {
           @for (game of list.games; track game.id) {
-            <p [routerLink]="['../game', game.id]">{{ game.name }}</p>
-            <button (click)="deleteGameFromList(game.id, list.id)">Delete</button>
+            <app-game-list-item [game]="game" [listId]="list.id"/>
           }
         } @else {
           <p>No games currently in list</p>
         }
 
         @if (list.type == 'user') {
-          <button (click)="deleteList(list.id)">Delete list</button>
+          <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list.id)" />
         }
       </div>
     }

@@ -29,6 +29,8 @@ export const GamesStore = signalStore(
         const userGame: UserGame = {
           ...game,
           lists: [listId],
+          rating: { score: 0, total: 5 },
+          note: '',
         };
 
         patchState(store, addEntity(userGame));
@@ -48,6 +50,33 @@ export const GamesStore = signalStore(
           },
         })
       );
+    },
+    updateGameRating(id: number, score: number): void {
+      patchState(
+        store,
+        updateEntity({
+          id,
+          changes: {
+            rating: {
+              ...store.entityMap()[id].rating,
+              score,
+            },
+          },
+        })
+      );
+    },
+    updateGameNote(id: number, note: string): void {
+      patchState(
+        store,
+        updateEntity({
+          id,
+          changes: {
+            note,
+          },
+        })
+      );
+
+      console.log(store.entities());
     },
   }))
 );
