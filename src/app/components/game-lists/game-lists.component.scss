@@ -8,24 +8,3 @@
   gap: 20px;
   flex-wrap: wrap;
 }
-
-.list {
-  padding: 10px;
-  border: 1px solid #efefef;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-}
-
-.list-item {
-  display: flex;
-  gap: 10px;
-}
-
-.trash {
-  color: #333;
-
-  &:hover {
-    color: #ff4747;
-  }
-}

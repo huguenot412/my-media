@@ -8,11 +8,21 @@ import { GameListsStore } from '../../store/game-lists.store';
 import { GamesStore } from '../../store/games.store';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [AsyncPipe, JsonPipe, FormsModule, NgOptimizedImage],
+  imports: [
+    AsyncPipe,
+    JsonPipe,
+    RouterLink,
+    FormsModule,
+    NgOptimizedImage,
+    FontAwesomeModule,
+  ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
@@ -24,6 +34,7 @@ export class SearchComponent implements OnDestroy {
   searchResults$: Observable<Game[]> = of([]);
   searchSubject$ = new Subject<void>();
   searchSubjectSub!: Subscription;
+  faCircleInfo = faCircleInfo;
 
   constructor() {
     this.searchSubjectSub = this.searchSubject$

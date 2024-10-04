@@ -18,6 +18,7 @@
     <button (click)="addGame(game, 'playing')">Playing</button>
     <button (click)="addGame(game, 'played')">Played</button>
     <button (click)="addGame(game, 'backlog')">Backlog</button>
+    <fa-icon class="info-icon" [icon]="faCircleInfo" [routerLink]="['../game', game.id]"/>
 
     @if (gameListsStore.userCreatedLists().length) {
       <select name="lists" id="lists">

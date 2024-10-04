@@ -1,6 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .cover-art {
@@ -24,6 +25,7 @@
 
 .game-name {
   display: flex;
+  width: 100%;
   gap: 10px;
   justify-content: space-between;
   align-items: center;

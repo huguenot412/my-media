@@ -1,0 +1,21 @@
+<div class="list">
+  <button (click)="toggleRankedView()">Switch to {{ rankedView() ? 'unranked' : 'ranked' }}</button>
+  <h2>{{ list().name }}</h2>
+
+  @if(list().games.length) {
+    @for (game of list().games; track game.id; let index = $index) {
+      <div class="list-item">
+        @if (rankedView()) {
+          <p>{{ index + 1 }}</p>
+        }
+        <app-game-list-item [game]="game" [listId]="list().id" [detailView]="detailView()"/>
+      </div>
+    }
+  } @else {
+    <p>No games currently in list</p>
+  }
+
+  @if (list().type == 'user') {
+    <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list().id)" />
+  }
+</div>

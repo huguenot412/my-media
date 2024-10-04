@@ -9,6 +9,7 @@ import { RatingComponent } from '../rating/rating.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { GameListItemComponent } from '../game-list-item/game-list-item.component';
+import { GameListComponent } from '../game-list/game-list.component';
 
 @Component({
   selector: 'app-game-lists',
@@ -19,19 +20,15 @@ import { GameListItemComponent } from '../game-list-item/game-list-item.componen
     RouterLink,
     RatingComponent,
     FontAwesomeModule,
-    GameListItemComponent,
+    GameListComponent,
   ],
   templateUrl: './game-lists.component.html',
   styleUrl: './game-lists.component.scss',
 })
 export class GameListsComponent {
   gameListsStore = inject(GameListsStore);
-  gamesStore = inject(GamesStore);
   newListName = '';
-  faTrash = faTrash;
   detailView = signal(false);
-  // Add ranked as property to list metadata
-  rankedView = signal(false);
 
   addList(name: string): void {
     const list: GameListMetadata = {
@@ -47,15 +44,7 @@ export class GameListsComponent {
     this.gameListsStore.addList(list);
   }
 
-  deleteList(listId: string): void {
-    this.gameListsStore.deleteList(listId);
-  }
-
   toggleDetailView(): void {
     this.detailView.set(!this.detailView());
-  }
-
-  toggleRankedView(): void {
-    this.rankedView.set(!this.rankedView());
   }
 }
