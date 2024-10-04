@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { SearchComponent } from './components/search/search.component';
 import { GameListsComponent } from './components/game-lists/game-lists.component';
 import { OnInit } from '@angular/core';
@@ -15,6 +15,7 @@ import { GameListMetadata } from './model/games.interfaces';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+  router = inject(Router);
   gameListsStore = inject(GameListsStore);
   title = 'my-media';
   defaultGameLists: GameListMetadata[] = [
@@ -49,5 +50,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameListsStore.addGameLists(this.defaultGameLists);
+
+    // if (!localStorage.getItem('activeUser')) {
+    //   this.router.navigate(['/login']);
+    // }
   }
 }

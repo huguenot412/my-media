@@ -1,15 +1,5 @@
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-} from '@ngrx/signals';
-import {
-  addEntities,
-  addEntity,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withMethods } from '@ngrx/signals';
+import { addEntity, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { Game, UserGame } from '../model/games.interfaces';
 
 export const GamesStore = signalStore(
@@ -75,8 +65,6 @@ export const GamesStore = signalStore(
           },
         })
       );
-
-      console.log(store.entities());
     },
   }))
 );

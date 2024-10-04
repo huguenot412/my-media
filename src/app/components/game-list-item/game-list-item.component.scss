@@ -13,9 +13,34 @@
   height: 50px;
 }
 
+.trash {
+  color: #333;
+  visibility: hidden;
+
+  &:hover {
+    color: #ff4747;
+  }
+}
+
 .game-name {
   display: flex;
   gap: 10px;
   justify-content: space-between;
   align-items: center;
+
+  &:hover {
+    .trash {
+      visibility: visible;
+    }
+  }
+}
+
+.name-and-thumbnail {
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
 }

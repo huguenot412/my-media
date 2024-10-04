@@ -17,6 +17,11 @@
   flex-direction: column;
 }
 
+.list-item {
+  display: flex;
+  gap: 10px;
+}
+
 .trash {
   color: #333;
 

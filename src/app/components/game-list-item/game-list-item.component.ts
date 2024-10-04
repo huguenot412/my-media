@@ -3,12 +3,14 @@ import {
   Component,
   inject,
   input,
+  OnInit,
+  signal,
 } from '@angular/core';
 import { RatingComponent } from '../rating/rating.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 import { UserGame } from '../../model/games.interfaces';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { GamesStore } from '../../store/games.store';
 import { FormsModule } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
@@ -27,18 +29,30 @@ import { NgOptimizedImage } from '@angular/common';
   templateUrl: './game-list-item.component.html',
   styleUrl: './game-list-item.component.scss',
 })
-export class GameListItemComponent {
+export class GameListItemComponent implements OnInit {
   game = input.required<UserGame>();
+  gamesStore = inject(GamesStore);
   listId = input.required<string>();
   faTrash = faTrash;
-  gamesStore = inject(GamesStore);
+  faPenToSquare = faPenToSquare;
   note = '';
+  detailView = input.required<boolean>();
+  editNote = signal(false);
 
-  deleteGameFromList(gameId: number, listId: string): void {
-    this.gamesStore.removeGameFromList(gameId, listId);
+  ngOnInit(): void {
+    this.note = this.game().note;
   }
 
-  updateGameNote(gameId: number, note: string): void {
-    this.gamesStore.updateGameNote(gameId, note);
+  deleteGameFromList(): void {
+    this.gamesStore.removeGameFromList(this.game().id, this.listId());
+  }
+
+  updateGameNote(): void {
+    this.gamesStore.updateGameNote(this.game().id, this.note);
+    this.toggleEditNote();
+  }
+
+  toggleEditNote(): void {
+    this.editNote.set(!this.editNote());
   }
 }

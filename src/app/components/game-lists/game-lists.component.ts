@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameListsStore } from '../../store/game-lists.store';
 import { GameListMetadata } from '../../model/games.interfaces';
@@ -29,6 +29,9 @@ export class GameListsComponent {
   gamesStore = inject(GamesStore);
   newListName = '';
   faTrash = faTrash;
+  detailView = signal(false);
+  // Add ranked as property to list metadata
+  rankedView = signal(false);
 
   addList(name: string): void {
     const list: GameListMetadata = {
@@ -46,5 +49,13 @@ export class GameListsComponent {
 
   deleteList(listId: string): void {
     this.gameListsStore.deleteList(listId);
+  }
+
+  toggleDetailView(): void {
+    this.detailView.set(!this.detailView());
+  }
+
+  toggleRankedView(): void {
+    this.rankedView.set(!this.rankedView());
   }
 }
