@@ -65,6 +65,7 @@ export interface UserGame extends Game {
   note: string;
 }
 
+// TODO: Replace with User
 export interface ListOwner {
   name: string;
   id: string;
@@ -72,11 +73,17 @@ export interface ListOwner {
 
 type GameListType = 'default' | 'user';
 
+export interface GameListRanking {
+  ranked: boolean;
+  order: number[]; // Game ids in ranked order
+}
+
 export interface GameListMetadata {
   name: string;
   id: string;
-  owner: ListOwner;
+  owner: ListOwner; // TODO: Change to User
   type: GameListType;
+  ranking: GameListRanking;
 }
 
 export interface GameList extends GameListMetadata {

@@ -1,13 +1,24 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 .cover-art {
   object-fit: contain;
 }
 
 .cover-art-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  min-height: 250px;
 }
 
 .info-icon {
   cursor: pointer;
+}
+
+.game {
+  width: 100%;
 }

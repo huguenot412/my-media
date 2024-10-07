@@ -1,21 +1,30 @@
-<div class="list">
-  <button (click)="toggleRankedView()">Switch to {{ rankedView() ? 'unranked' : 'ranked' }}</button>
-  <h2>{{ list().name }}</h2>
-
-  @if(list().games.length) {
-    @for (game of list().games; track game.id; let index = $index) {
-      <div class="list-item">
-        @if (rankedView()) {
-          <p>{{ index + 1 }}</p>
+<mat-card class="list">
+  <mat-card-header>
+    <mat-card-title>
+      <p>{{ list().name }}</p>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if(list().games.length) {
+      <div class="droplist" cdkDropList cdkDropListOrientation="vertical" (cdkDropListDropped)="onDrop($event)">
+        @for (game of list().games; track game.id; let index = $index) {
+          <div cdkDrag class="list-item">
+            <fa-icon class="drag-handle" [icon]="faGripLinesVertical" cdkDragHandle/>
+            @if (rankedView()) {
+              <p>{{ index + 1 }}</p>
+            }
+            <app-game-list-item [game]="game" [listId]="list().id" [detailView]="detailView()"/>
+          </div>
         }
-        <app-game-list-item [game]="game" [listId]="list().id" [detailView]="detailView()"/>
       </div>
+    } @else {
+      <p>No games currently in list</p>
     }
-  } @else {
-    <p>No games currently in list</p>
-  }
-
-  @if (list().type == 'user') {
-    <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list().id)" />
-  }
-</div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="toggleRankedView()">Switch to {{ rankedView() ? 'unranked' : 'ranked' }}</button>
+    @if (list().type == 'user') {
+      <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list().id)" />
+    }
+  </mat-card-actions>
+</mat-card>

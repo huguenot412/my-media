@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GamesService } from '../../services/games.service';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe, JsonPipe, NgOptimizedImage } from '@angular/common';
@@ -11,6 +11,10 @@ import { OnDestroy } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-search',
@@ -22,6 +26,10 @@ import { RouterLink } from '@angular/router';
     FormsModule,
     NgOptimizedImage,
     FontAwesomeModule,
+    MatCardModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',

@@ -14,6 +14,7 @@ import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { GamesStore } from '../../store/games.store';
 import { FormsModule } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
+import { GameListsStore } from '../../store/game-lists.store';
 
 @Component({
   selector: 'app-game-list-item',

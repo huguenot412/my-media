@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { SearchComponent } from './components/search/search.component';
-import { GameListsComponent } from './components/game-lists/game-lists.component';
 import { OnInit } from '@angular/core';
 import { inject } from '@angular/core';
 import { GameListsStore } from './store/game-lists.store';
 import { GameListMetadata } from './model/games.interfaces';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { NavComponent } from './components/nav/nav.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SearchComponent, GameListsComponent],
+  imports: [RouterOutlet, MatSidenavModule, MatListModule, NavComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -27,6 +28,10 @@ export class AppComponent implements OnInit {
         id: 'chris_snow',
       },
       type: 'default',
+      ranking: {
+        ranked: false,
+        order: [],
+      },
     },
     {
       name: 'Playing',
@@ -36,6 +41,10 @@ export class AppComponent implements OnInit {
         id: 'chris_snow',
       },
       type: 'default',
+      ranking: {
+        ranked: false,
+        order: [],
+      },
     },
     {
       name: 'Backlog',
@@ -45,6 +54,10 @@ export class AppComponent implements OnInit {
         id: 'chris_snow',
       },
       type: 'default',
+      ranking: {
+        ranked: false,
+        order: [],
+      },
     },
   ];
 

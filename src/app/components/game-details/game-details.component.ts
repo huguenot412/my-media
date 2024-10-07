@@ -6,7 +6,6 @@ import {
   AsyncPipe,
   DatePipe,
   DecimalPipe,
-  JsonPipe,
   NgOptimizedImage,
 } from '@angular/common';
 import { GamesStore } from '../../store/games.store';

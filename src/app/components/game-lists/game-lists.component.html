@@ -1,15 +1,25 @@
-<app-search />
+<app-search class="search"/>
 
 <div>
-  <button (click)="toggleDetailView()">Switch to {{ detailView() ? 'simple view' : 'detail view'}}</button>
+  <button mat-button (click)="toggleDetailView()">Switch to {{ detailView() ? 'simple view' : 'detail view'}}</button>
+  <form #newListForm="ngForm" (ngSubmit)="addList(this.newListName)">
+    <mat-form-field >
+      <mat-label>Create new list</mat-label>
+      <input matInput type="text" [(ngModel)]="newListName" name="newListName">
+      @if (newListName) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="newListName=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+    <button mat-button type="submit" [disabled]="!newListName">Create new list</button>
+  </form>
+  <!-- <button mat-button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button> -->
   <div class="lists-container">
     @for (list of gameListsStore.gameLists(); track list.id) {
-      <app-game-list [list]="list" [detailView]="detailView()"/>
+      <app-game-list [list]="list" [rankedView]="list.ranking.ranked" [detailView]="detailView()"/>
     }
   </div>
-
-  <input [(ngModel)]="newListName" name="newListName"/>
-  <button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button>
 </div>
 
 
