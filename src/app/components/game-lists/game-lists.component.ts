@@ -1,14 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameListsStore } from '../../store/game-lists.store';
-import { GameListMetadata } from '../../model/games.interfaces';
+import { GameList } from '../../model/games.interfaces';
 import { FormsModule } from '@angular/forms';
-import { GamesStore } from '../../store/games.store';
 import { SearchComponent } from '../search/search.component';
 import { RatingComponent } from '../rating/rating.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { GameListItemComponent } from '../game-list-item/game-list-item.component';
+import { GameListComponent } from '../game-list/game-list.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-game-lists',
@@ -19,19 +21,22 @@ import { GameListItemComponent } from '../game-list-item/game-list-item.componen
     RouterLink,
     RatingComponent,
     FontAwesomeModule,
-    GameListItemComponent,
+    GameListComponent,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
+    ScrollingModule,
   ],
   templateUrl: './game-lists.component.html',
   styleUrl: './game-lists.component.scss',
 })
 export class GameListsComponent {
   gameListsStore = inject(GameListsStore);
-  gamesStore = inject(GamesStore);
   newListName = '';
-  faTrash = faTrash;
+  detailView = signal(false);
 
   addList(name: string): void {
-    const list: GameListMetadata = {
+    const list: GameList = {
       name,
       id: name.toLowerCase(),
       owner: {
@@ -39,12 +44,18 @@ export class GameListsComponent {
         id: 'chris_snow',
       },
       type: 'user',
+      ranked: false,
+      games: [],
     };
 
     this.gameListsStore.addList(list);
   }
 
-  deleteList(listId: string): void {
-    this.gameListsStore.deleteList(listId);
+  toggleDetailView(): void {
+    this.detailView.set(!this.detailView());
+  }
+
+  listTrackBy(index: number, list: GameList): string {
+    return list.id;
   }
 }

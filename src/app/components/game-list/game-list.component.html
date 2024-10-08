@@ -1,0 +1,63 @@
+<mat-card class="list">
+  <mat-card-header>
+    <mat-card-title>
+      <p>{{ list().name }}</p>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if(list().games.length) {
+      @if (scrollView()) {
+        <cdk-virtual-scroll-viewport appendOnly itemSize="5" class="games-scroll-viewport">
+          <div class="droplist" cdkDropList cdkDropListOrientation="vertical" (cdkDropListDropped)="onDrop($event)">
+
+              <div cdkDrag class="list-item" *cdkVirtualFor="let game of games(); trackBy: gamesTrackBy; let i = index">
+                <fa-icon class="drag-handle" [icon]="faGripLinesVertical" cdkDragHandle/>
+
+                <app-game-list-item
+                  [game]="game"
+                  [listId]="list().id"
+                  [detailView]="detailView()"
+                  [rankedView]="rankedView()"
+                  [rank]="i + 1"
+                />
+              </div>
+
+          </div>
+        </cdk-virtual-scroll-viewport>
+      } @else {
+        <div class="droplist" cdkDropList cdkDropListOrientation="vertical" (cdkDropListDropped)="onDrop($event)">
+          @for (game of games(); track game.id; let index = $index) {
+            <div cdkDrag class="list-item">
+              <fa-icon class="drag-handle" [icon]="faGripLinesVertical" cdkDragHandle/>
+
+              <app-game-list-item
+                [game]="game"
+                [listId]="list().id"
+                [detailView]="detailView()"
+                [rankedView]="rankedView()"
+                [rank]="$index + 1"
+              />
+            </div>
+          }
+        </div>
+      }
+    } @else {
+      <p>No games currently in list</p>
+    }
+  </mat-card-content>
+  <mat-card-actions class="actions">
+    <mat-button-toggle-group>
+      <mat-button-toggle value="unranked" (click)="setRankedView(false)" [checked]="rankedView() === false">Unranked</mat-button-toggle>
+      <mat-button-toggle value="ranked" (click)="setRankedView(true)" [checked]="rankedView() === true">Ranked</mat-button-toggle>
+    </mat-button-toggle-group>
+    <mat-button-toggle-group>
+      <mat-button-toggle value="Scroll" (click)="scrollView.set(true)" [checked]="scrollView() === true">Scroll</mat-button-toggle>
+      <mat-button-toggle value="Full" (click)="scrollView.set(false)" [checked]="scrollView() === false">Full</mat-button-toggle>
+    </mat-button-toggle-group>
+    <!-- <button mat-button (click)="toggleRankedView()">Switch to {{ rankedView() ? 'unranked' : 'ranked' }}</button> -->
+    <!-- <button mat-button (click)="scrollView.set(!scrollView())">Switch to {{ scrollView() ? 'full list' : 'scroll list' }}</button> -->
+    @if (list().type == 'user') {
+      <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list().id)" />
+    }
+  </mat-card-actions>
+</mat-card>

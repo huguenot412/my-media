@@ -3,6 +3,19 @@
     <img class="cover-art" [ngSrc]="game.cover?.url!.replace('t_thumb', 't_cover_big_2x')" alt="Cover Art" fill priority>
   </div>
   <h1>{{ game.name }}</h1>
+
+  @if (userGame()) {
+    @if (userGame()!.rating.score) {
+      <p>My rating:</p>
+      <app-rating [rating]="userGame()!.rating" [gameId]="userGame()!.id"/>
+    }
+
+    @if (userGame()!.note) {
+      <p>My notes:</p>
+      <p>{{ userGame()!.note }}</p>
+    }
+  }
+
   <dl>
     <dt><p>Summary</p></dt>
     <dd><p>{{ game.summary }}</p></dd>

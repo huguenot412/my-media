@@ -1,30 +1,26 @@
-<app-search />
+<app-search class="search"/>
 
-<div>
-  <h1>Lists</h1>
+<div class="lists-container">
+  <form #newListForm="ngForm" (ngSubmit)="addList(this.newListName)">
+    <mat-form-field >
+      <mat-label>Create new list</mat-label>
+      <input matInput type="text" [(ngModel)]="newListName" name="newListName">
+      @if (newListName) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="newListName=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+    <button mat-button type="submit" [disabled]="!newListName">Create new list</button>
+    <button mat-button (click)="toggleDetailView()">Switch to {{ detailView() ? 'simple view' : 'detail view'}}</button>
+  </form>
+  <!-- <button mat-button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button> -->
 
-  <div class="lists-container">
-    @for (list of gameListsStore.gameLists(); track list.id) {
-      <div class="list">
-        <h2>{{ list.name }}</h2>
-
-        @if(list.games.length) {
-          @for (game of list.games; track game.id) {
-            <app-game-list-item [game]="game" [listId]="list.id"/>
-          }
-        } @else {
-          <p>No games currently in list</p>
-        }
-
-        @if (list.type == 'user') {
-          <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list.id)" />
-        }
-      </div>
-    }
-  </div>
-
-  <input [(ngModel)]="newListName" name="newListName"/>
-  <button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button>
+  <cdk-virtual-scroll-viewport appendOnly itemSize="10" class="lists-scroll-viewport">
+    <div class="lists">
+      <app-game-list *cdkVirtualFor="let list of gameListsStore.entities(); trackBy: listTrackBy" class="list" [list]="list" [rankedView]="list.ranked" [detailView]="detailView()"/>
+    </div>
+  </cdk-virtual-scroll-viewport>
 </div>
 
 

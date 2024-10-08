@@ -1,0 +1,51 @@
+.trash {
+  color: #333;
+
+  &:hover {
+    color: #ff4747;
+  }
+}
+
+.list-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.list {
+  padding: 10px;
+  border: 1px solid #efefef;
+  display: flex;
+  flex-direction: column;
+}
+
+.drag-handle {
+  color: #898989;
+  cursor: grab;
+  width: 20px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.list-name {
+  font-size: 1.6rem;
+}
+
+.droplist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.games-scroll-viewport {
+  height: 500px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

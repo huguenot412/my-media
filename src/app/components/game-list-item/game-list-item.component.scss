@@ -1,6 +1,8 @@
 :host {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  gap: 10px;
 }
 
 .cover-art {
@@ -9,13 +11,62 @@
 
 .cover-art-container {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+}
+
+.game {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  &:hover {
+    .trash {
+      visibility: visible;
+    }
+  }
 }
 
 .game-name {
   display: flex;
+  width: 100%;
   gap: 10px;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+}
+
+.trash {
+  color: #333;
+  visibility: hidden;
+  justify-self: flex-end;
+
+  &:hover {
+    color: #ff4747;
+  }
+}
+
+.name-and-thumbnail {
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.list-item {
+  display: flex;
+}
+
+p {
+  margin: 0;
+}
+
+.rank {
+  font-weight: 700;
+  flex: 0 0 30px;
+  text-align: center;
 }

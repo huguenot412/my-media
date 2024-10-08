@@ -5,61 +5,83 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { Game, GameList, GameListMetadata } from '../model/games.interfaces';
-import { computed, inject } from '@angular/core';
-import { GamesStore } from './games.store';
+import { GameList } from '../model/games.interfaces';
+import { computed } from '@angular/core';
+import {
+  addEntities,
+  addEntity,
+  removeEntity,
+  updateEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
 
 type GameListsState = {
-  gameListsMetadata: GameListMetadata[];
+  gameLists: GameList[];
   isLoaded: boolean;
 };
 
 const initialState: GameListsState = {
-  gameListsMetadata: [],
+  gameLists: [],
   isLoaded: false,
 };
 
 export const GameListsStore = signalStore(
   { providedIn: 'root' },
+  withEntities<GameList>(),
   withState(initialState),
-  withComputed(({ gameListsMetadata }) => {
-    const gamesStore = inject(GamesStore);
-
-    return {
-      gameLists: computed(() => {
-        const gameLists: GameList[] = gameListsMetadata().map((list) => ({
-          ...list,
-          games: gamesStore
-            .entities()
-            .filter((game) => game.lists.includes(list.id)),
-        }));
-
-        return gameLists;
-      }),
-      userCreatedLists: computed(() =>
-        gameListsMetadata().filter((list) => list.type === 'user')
-      ),
-    };
-  }),
+  withComputed(({ entities }) => ({
+    userCreatedLists: computed(() =>
+      entities().filter((list) => list.type === 'user')
+    ),
+  })),
   withMethods((store) => ({
-    addGameLists(lists: GameListMetadata[]): void {
-      patchState(store, {
-        gameListsMetadata: [...store.gameListsMetadata(), ...lists],
-      });
-
-      console.log(store.gameLists());
+    addGameLists(lists: GameList[]): void {
+      patchState(store, addEntities(lists));
     },
-    addList(list: GameListMetadata): void {
-      patchState(store, {
-        gameListsMetadata: [...store.gameListsMetadata(), list],
-      });
+    addList(list: GameList): void {
+      patchState(store, addEntity(list));
     },
     deleteList(listId: string): void {
-      patchState(store, {
-        gameListsMetadata: [
-          ...store.gameListsMetadata().filter((list) => list.id !== listId),
-        ],
-      });
+      patchState(store, removeEntity(listId));
+    },
+    addGameToList(listId: string, gameId: number): void {
+      patchState(
+        store,
+        updateEntity({
+          id: listId,
+          changes: { games: [...store.entityMap()[listId].games, gameId] },
+        })
+      );
+    },
+    updateListGames(listId: string, gameIds: number[]): void {
+      patchState(
+        store,
+        updateEntity({ id: listId, changes: { games: gameIds } })
+      );
+    },
+    removeGameFromList(listId: string, gameId: number): void {
+      patchState(
+        store,
+        updateEntity({
+          id: listId,
+          changes: {
+            games: store
+              .entityMap()
+              [listId].games.filter((game) => game !== gameId),
+          },
+        })
+      );
+    },
+    setRanked(id: string, ranked: boolean): void {
+      patchState(
+        store,
+        updateEntity({
+          id,
+          changes: {
+            ranked,
+          },
+        })
+      );
     },
   }))
 );

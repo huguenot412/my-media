@@ -1,9 +1,63 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 .cover-art {
   object-fit: contain;
 }
 
 .cover-art-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  min-height: 250px;
+}
+
+.info-icon {
+  cursor: pointer;
+  padding: 0 5px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  visibility: hidden;
+}
+
+.game {
+  width: 100%;
+  position: relative;
+  margin-bottom: 10px;
+
+  &:hover .info-icon {
+    visibility: visible;
+  }
+}
+
+.game-title {
+  padding: 0 10px;
+}
+
+.search {
+  width: 100%;
+  min-width: 280px;
+}
+
+.actions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.list-select {
+  margin: 5px;
+}
+
+.search-results {
+  height: 100vh;
+  width: 100%;
 }

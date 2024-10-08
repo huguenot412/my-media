@@ -10,3 +10,19 @@
 .active {
   color: var(--star-gold);
 }
+
+.clear-rank {
+  display: none;
+}
+
+:host:hover {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  .clear-rank {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0;
+  }
+}

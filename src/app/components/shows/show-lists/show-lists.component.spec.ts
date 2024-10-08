@@ -1,0 +1,23 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ShowListsComponent } from './show-lists.component';
+
+describe('ShowListsComponent', () => {
+  let component: ShowListsComponent;
+  let fixture: ComponentFixture<ShowListsComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ShowListsComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(ShowListsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

@@ -1,55 +1,25 @@
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-} from '@ngrx/signals';
-import {
-  addEntities,
-  addEntity,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withMethods } from '@ngrx/signals';
+import { addEntity, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { Game, UserGame } from '../model/games.interfaces';
 
 export const GamesStore = signalStore(
   { providedIn: 'root' },
   withEntities<UserGame>(),
   withMethods((store) => ({
-    addGame(game: Game, listId: string): void {
+    addGame(game: Game): void {
       if (store.entityMap()[game.id]) {
-        patchState(
-          store,
-          updateEntity({
-            id: game.id,
-            changes: { lists: [...store.entityMap()[game.id].lists, listId] },
-          })
-        );
+        return;
       } else {
         const userGame: UserGame = {
-          ...game,
-          lists: [listId],
+          id: game.id,
+          name: game.name,
+          cover: game.cover,
           rating: { score: 0, total: 5 },
           note: '',
         };
 
         patchState(store, addEntity(userGame));
       }
-    },
-    removeGameFromList(gameId: number, listId: string): void {
-      patchState(
-        store,
-        updateEntity({
-          id: gameId,
-          changes: {
-            lists: [
-              ...store
-                .entityMap()
-                [gameId].lists.filter((list) => list !== listId),
-            ],
-          },
-        })
-      );
     },
     updateGameRating(id: number, score: number): void {
       patchState(
@@ -75,8 +45,6 @@ export const GamesStore = signalStore(
           },
         })
       );
-
-      console.log(store.entities());
     },
   }))
 );
