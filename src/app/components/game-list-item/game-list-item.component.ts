@@ -15,6 +15,7 @@ import { GamesStore } from '../../store/games.store';
 import { FormsModule } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
 import { GameListsStore } from '../../store/game-lists.store';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-game-list-item',
@@ -25,6 +26,7 @@ import { GameListsStore } from '../../store/game-lists.store';
     FontAwesomeModule,
     FormsModule,
     NgOptimizedImage,
+    MatCardModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './game-list-item.component.html',
@@ -39,6 +41,8 @@ export class GameListItemComponent implements OnInit {
   faPenToSquare = faPenToSquare;
   note = '';
   detailView = input.required<boolean>();
+  rankedView = input.required<boolean>();
+  rank = input.required<number>();
   editNote = signal(false);
 
   ngOnInit(): void {

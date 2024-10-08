@@ -1,30 +1,40 @@
-<div class="game-name">
-  <div class="name-and-thumbnail">
-    <div class="cover-art-container">
-      <img class="cover-art" [ngSrc]="game().cover?.url!" alt="Cover Art" fill>
+<mat-card class="list-item">
+  <mat-card-content>
+    <div class="game">
+      <div class="game-name">
+        @if (rankedView()) {
+            <p class="rank">{{ rank() }}</p>
+        }
+        <div class="cover-art-container">
+          <img class="cover-art" [ngSrc]="game().cover.url!" alt="Cover Art" fill>
+        </div>
+        <p [routerLink]="['../game', game().id]">{{ game().name }}</p>
+
+      </div>
+      <fa-icon
+        class="trash"
+        [icon]="faTrash"
+        (click)="deleteGameFromList()"
+      />
     </div>
-    <p [routerLink]="['../game', game().id]">{{ game().name }}</p>
-  </div>
-  <fa-icon
-    class="trash"
-    [icon]="faTrash"
-    (click)="deleteGameFromList()"
-  />
-</div>
-@if (detailView()) {
-  <app-rating [rating]="game().rating" [gameId]="game().id"/>
 
-  @if (editNote()) {
-    <textarea [(ngModel)]="note" [value]="this.game().note" resize="vertical">{{ this.game().note }}</textarea>
-    <button (click)="updateGameNote()">Save note</button>
-  } @else {
 
-    <p>{{ game().note ? game().note : 'Add a note' }}</p>
+    @if (detailView()) {
+      <app-rating [rating]="game().rating" [gameId]="game().id"/>
 
-    <fa-icon
-      [icon]="faPenToSquare"
-      (click)=" toggleEditNote()"
-    />
-  }
-}
+      @if (editNote()) {
+        <textarea [(ngModel)]="note" [value]="this.game().note" resize="vertical">{{ this.game().note }}</textarea>
+        <button (click)="updateGameNote()">Save note</button>
+      } @else {
+        <p>{{ game().note ? game().note : 'Add a note' }}</p>
+      }
+      <fa-icon
+        [icon]="faPenToSquare"
+        (click)=" toggleEditNote()"
+      />
+    }
+  </mat-card-content>
+</mat-card>
+
+
 

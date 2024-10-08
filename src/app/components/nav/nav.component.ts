@@ -17,15 +17,15 @@ interface NavLink {
 export class NavComponent {
   links = signal<NavLink[]>([
     {
-      displayName: 'Game lists',
+      displayName: 'Games',
       path: 'game-lists',
     },
     {
-      displayName: 'Book lists',
+      displayName: 'Books',
       path: 'book-lists',
     },
     {
-      displayName: 'Film/TV lists',
+      displayName: 'Film/TV',
       path: 'show-lists',
     },
     {

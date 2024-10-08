@@ -15,6 +15,9 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { GamesStore } from '../../store/games.store';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-game-list',
@@ -25,6 +28,9 @@ import { GamesStore } from '../../store/games.store';
     DragDropModule,
     MatButtonModule,
     MatCardModule,
+    ScrollingModule,
+    MatButtonToggleModule,
+    FormsModule,
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.scss',
@@ -35,6 +41,7 @@ export class GameListComponent {
   gamesStore = inject(GamesStore);
   rankedView = input.required<boolean>();
   detailView = input<boolean>(false);
+  scrollView = signal(true);
   faTrash = faTrash;
   faGripLinesVertical = faGripLinesVertical;
   games = computed(() => {
@@ -42,6 +49,10 @@ export class GameListComponent {
       (gameId) => this.gamesStore.entityMap()[gameId]
     );
   });
+
+  setRankedView(ranked: boolean): void {
+    this.gameListsStore.setRanked(this.list().id, ranked);
+  }
 
   toggleRankedView(): void {
     this.gameListsStore.setRanked(this.list().id, !this.rankedView());
@@ -54,5 +65,9 @@ export class GameListComponent {
   onDrop(event: CdkDragDrop<UserGame[]>): void {
     moveItemInArray(this.list().games, event.previousIndex, event.currentIndex);
     this.gameListsStore.updateListGames(this.list().id, this.list().games);
+  }
+
+  gamesTrackBy(index: number, game: UserGame): number {
+    return game.id;
   }
 }

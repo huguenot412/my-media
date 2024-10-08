@@ -10,6 +10,7 @@ import { GameListComponent } from '../game-list/game-list.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-game-lists',
@@ -24,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    ScrollingModule,
   ],
   templateUrl: './game-lists.component.html',
   styleUrl: './game-lists.component.scss',
@@ -51,5 +53,9 @@ export class GameListsComponent {
 
   toggleDetailView(): void {
     this.detailView.set(!this.detailView());
+  }
+
+  listTrackBy(index: number, list: GameList): string {
+    return list.id;
   }
 }

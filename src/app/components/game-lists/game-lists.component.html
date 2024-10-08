@@ -1,7 +1,6 @@
 <app-search class="search"/>
 
-<div>
-  <button mat-button (click)="toggleDetailView()">Switch to {{ detailView() ? 'simple view' : 'detail view'}}</button>
+<div class="lists-container">
   <form #newListForm="ngForm" (ngSubmit)="addList(this.newListName)">
     <mat-form-field >
       <mat-label>Create new list</mat-label>
@@ -13,13 +12,15 @@
       }
     </mat-form-field>
     <button mat-button type="submit" [disabled]="!newListName">Create new list</button>
+    <button mat-button (click)="toggleDetailView()">Switch to {{ detailView() ? 'simple view' : 'detail view'}}</button>
   </form>
   <!-- <button mat-button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button> -->
-  <div class="lists-container">
-    @for (list of gameListsStore.entities(); track list.id) {
-      <app-game-list [list]="list" [rankedView]="list.ranked" [detailView]="detailView()"/>
-    }
-  </div>
+
+  <cdk-virtual-scroll-viewport appendOnly itemSize="10" class="lists-scroll-viewport">
+    <div class="lists">
+      <app-game-list *cdkVirtualFor="let list of gameListsStore.entities(); trackBy: listTrackBy" class="list" [list]="list" [rankedView]="list.ranked" [detailView]="detailView()"/>
+    </div>
+  </cdk-virtual-scroll-viewport>
 </div>
 
 
