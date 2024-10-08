@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameListsStore } from '../../store/game-lists.store';
-import { GameListMetadata } from '../../model/games.interfaces';
+import { GameList } from '../../model/games.interfaces';
 import { FormsModule } from '@angular/forms';
 import { SearchComponent } from '../search/search.component';
 import { RatingComponent } from '../rating/rating.component';
@@ -34,7 +34,7 @@ export class GameListsComponent {
   detailView = signal(false);
 
   addList(name: string): void {
-    const list: GameListMetadata = {
+    const list: GameList = {
       name,
       id: name.toLowerCase(),
       owner: {
@@ -42,10 +42,8 @@ export class GameListsComponent {
         id: 'chris_snow',
       },
       type: 'user',
-      ranking: {
-        ranked: false,
-        order: [],
-      },
+      ranked: false,
+      games: [],
     };
 
     this.gameListsStore.addList(list);

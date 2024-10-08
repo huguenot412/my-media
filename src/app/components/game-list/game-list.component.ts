@@ -1,11 +1,11 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { GameListsStore } from '../../store/game-lists.store';
 import {
   faGripLinesVertical,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { GameList, UserGame } from '../../model/games.interfaces';
+import { Game, GameList, UserGame } from '../../model/games.interfaces';
 import { GameListItemComponent } from '../game-list-item/game-list-item.component';
 import {
   CdkDragDrop,
@@ -14,6 +14,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { GamesStore } from '../../store/games.store';
 
 @Component({
   selector: 'app-game-list',
@@ -31,27 +32,27 @@ import { MatCardModule } from '@angular/material/card';
 export class GameListComponent {
   list = input.required<GameList>();
   gameListsStore = inject(GameListsStore);
+  gamesStore = inject(GamesStore);
   rankedView = input.required<boolean>();
   detailView = input<boolean>(false);
   faTrash = faTrash;
   faGripLinesVertical = faGripLinesVertical;
+  games = computed(() => {
+    return this.list().games.map(
+      (gameId) => this.gamesStore.entityMap()[gameId]
+    );
+  });
 
   toggleRankedView(): void {
     this.gameListsStore.setRanked(this.list().id, !this.rankedView());
-    this.setRankingOrder();
   }
 
   deleteList(listId: string): void {
     this.gameListsStore.deleteList(listId);
   }
 
-  setRankingOrder(): void {
-    const rankingOrder = this.list().games.map((game) => game.id);
-    this.gameListsStore.setRankingOrder(this.list().id, rankingOrder);
-  }
-
   onDrop(event: CdkDragDrop<UserGame[]>): void {
     moveItemInArray(this.list().games, event.previousIndex, event.currentIndex);
-    this.setRankingOrder();
+    this.gameListsStore.updateListGames(this.list().id, this.list().games);
   }
 }

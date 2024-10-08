@@ -61,7 +61,8 @@ export class SearchComponent implements OnDestroy {
   }
 
   addGame(game: Game, listId: string): void {
-    this.gamesStore.addGame(game, listId);
+    this.gamesStore.addGame(game);
+    this.gameListsStore.addGameToList(listId, game.id);
   }
 
   onInputChange(): void {

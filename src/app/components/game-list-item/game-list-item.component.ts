@@ -33,6 +33,7 @@ import { GameListsStore } from '../../store/game-lists.store';
 export class GameListItemComponent implements OnInit {
   game = input.required<UserGame>();
   gamesStore = inject(GamesStore);
+  gameListsStore = inject(GameListsStore);
   listId = input.required<string>();
   faTrash = faTrash;
   faPenToSquare = faPenToSquare;
@@ -45,7 +46,7 @@ export class GameListItemComponent implements OnInit {
   }
 
   deleteGameFromList(): void {
-    this.gamesStore.removeGameFromList(this.game().id, this.listId());
+    this.gameListsStore.removeGameFromList(this.listId(), this.game().id);
   }
 
   updateGameNote(): void {

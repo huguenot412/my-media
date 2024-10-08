@@ -16,8 +16,8 @@
   </form>
   <!-- <button mat-button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button> -->
   <div class="lists-container">
-    @for (list of gameListsStore.gameLists(); track list.id) {
-      <app-game-list [list]="list" [rankedView]="list.ranking.ranked" [detailView]="detailView()"/>
+    @for (list of gameListsStore.entities(); track list.id) {
+      <app-game-list [list]="list" [rankedView]="list.ranked" [detailView]="detailView()"/>
     }
   </div>
 </div>

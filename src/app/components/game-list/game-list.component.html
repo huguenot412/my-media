@@ -7,7 +7,7 @@
   <mat-card-content>
     @if(list().games.length) {
       <div class="droplist" cdkDropList cdkDropListOrientation="vertical" (cdkDropListDropped)="onDrop($event)">
-        @for (game of list().games; track game.id; let index = $index) {
+        @for (game of games(); track game.id; let index = $index) {
           <div cdkDrag class="list-item">
             <fa-icon class="drag-handle" [icon]="faGripLinesVertical" cdkDragHandle/>
             @if (rankedView()) {

@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { inject } from '@angular/core';
 import { GameListsStore } from './store/game-lists.store';
-import { GameListMetadata } from './model/games.interfaces';
+import { GameList } from './model/games.interfaces';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { NavComponent } from './components/nav/nav.component';
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   router = inject(Router);
   gameListsStore = inject(GameListsStore);
   title = 'my-media';
-  defaultGameLists: GameListMetadata[] = [
+  defaultGameLists: GameList[] = [
     {
       name: 'Played',
       id: 'played',
@@ -28,10 +28,8 @@ export class AppComponent implements OnInit {
         id: 'chris_snow',
       },
       type: 'default',
-      ranking: {
-        ranked: false,
-        order: [],
-      },
+      ranked: false,
+      games: [],
     },
     {
       name: 'Playing',
@@ -41,10 +39,8 @@ export class AppComponent implements OnInit {
         id: 'chris_snow',
       },
       type: 'default',
-      ranking: {
-        ranked: false,
-        order: [],
-      },
+      ranked: false,
+      games: [],
     },
     {
       name: 'Backlog',
@@ -54,10 +50,8 @@ export class AppComponent implements OnInit {
         id: 'chris_snow',
       },
       type: 'default',
-      ranking: {
-        ranked: false,
-        order: [],
-      },
+      ranked: false,
+      games: [],
     },
   ];
 

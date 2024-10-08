@@ -41,17 +41,17 @@ export interface GameMode {
 export interface Game {
   id: number;
   name: string;
+  cover: Cover;
   alternative_name?: string;
   game?: number;
   published_at?: number;
-  cover?: Cover;
   summary?: string;
   first_release_date?: number;
   genres?: GameGenre[];
   involved_companies?: InvolvedGameCompany[];
   platforms?: GamePlatform[];
   total_rating?: number;
-  game_modes: GameMode[];
+  game_modes?: GameMode[];
 }
 
 export interface Rating {
@@ -60,7 +60,6 @@ export interface Rating {
 }
 
 export interface UserGame extends Game {
-  lists: string[];
   rating: Rating;
   note: string;
 }
@@ -78,14 +77,11 @@ export interface GameListRanking {
   order: number[]; // Game ids in ranked order
 }
 
-export interface GameListMetadata {
+export interface GameList {
   name: string;
   id: string;
   owner: ListOwner; // TODO: Change to User
   type: GameListType;
-  ranking: GameListRanking;
-}
-
-export interface GameList extends GameListMetadata {
-  games: UserGame[];
+  ranked: boolean;
+  games: number[];
 }
