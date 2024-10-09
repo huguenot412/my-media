@@ -43,10 +43,6 @@ export class GameListsComponent {
     const list: GameList = {
       name,
       id: name.toLowerCase(),
-      owner: {
-        name: 'Chris Snow',
-        id: 'chris_snow',
-      },
       type: 'user',
       ranked: false,
       games: [],

@@ -7,8 +7,10 @@ import {
   collectionData,
   doc,
   updateDoc,
+  addDoc,
 } from '@angular/fire/firestore';
-import { User } from '../model/users.interfaces';
+import { User, UserConfig } from '../model/users.interfaces';
+import { GameList } from '../model/games.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +32,33 @@ export class UsersService {
   updateUser(id: string, data: Partial<User>): void {
     const userDoc = doc(this.firestore, 'users', id);
     updateDoc(userDoc, data);
+  }
+
+  private createDefaultGameLists(): GameList[] {
+    const listNames = ['Played', 'Playing', 'Backlog'];
+
+    return listNames.map((name) => ({
+      name,
+      id: name.toLowerCase(),
+      type: 'default',
+      ranked: false,
+      games: [],
+    }));
+  }
+
+  createNewUser(config: UserConfig): void {
+    const { firstName, lastName, username } = config;
+
+    const user = {
+      id: '',
+      firstName,
+      lastName,
+      username,
+      games: [],
+      gameLists: this.createDefaultGameLists(),
+      friendIds: [],
+    };
+
+    addDoc(collection(this.firestore, 'users'), user);
   }
 }

@@ -30,41 +30,6 @@ export class AppComponent implements OnInit {
   gameListsStore = inject(GameListsStore);
   title = 'my-media';
   firestore = inject(Firestore);
-  defaultGameLists: GameList[] = [
-    {
-      name: 'Played',
-      id: 'played',
-      owner: {
-        name: 'Chris Snow',
-        id: 'chris_snow',
-      },
-      type: 'default',
-      ranked: false,
-      games: [],
-    },
-    {
-      name: 'Playing',
-      id: 'playing',
-      owner: {
-        name: 'Chris Snow',
-        id: 'chris_snow',
-      },
-      type: 'default',
-      ranked: false,
-      games: [],
-    },
-    {
-      name: 'Backlog',
-      id: 'backlog',
-      owner: {
-        name: 'Chris Snow',
-        id: 'chris_snow',
-      },
-      type: 'default',
-      ranked: false,
-      games: [],
-    },
-  ];
 
   users$!: Observable<any[]>;
 
@@ -74,8 +39,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.gameListsStore.addGameLists(this.defaultGameLists);
-
+    // this.gameListsStore.addGameLists(this.defaultGameLists);
     // if (!localStorage.getItem('activeUser')) {
     //   this.router.navigate(['/login']);
     // }

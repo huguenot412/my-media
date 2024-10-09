@@ -1,11 +1,19 @@
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
-import { addEntity, updateEntity, withEntities } from '@ngrx/signals/entities';
+import {
+  addEntity,
+  setAllEntities,
+  updateEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
 import { Game, UserGame } from '../model/games.interfaces';
 
 export const GamesStore = signalStore(
   { providedIn: 'root' },
   withEntities<UserGame>(),
   withMethods((store) => ({
+    setGames(games: UserGame[]): void {
+      patchState(store, setAllEntities(games));
+    },
     addGame(game: Game): void {
       if (store.entityMap()[game.id]) {
         return;

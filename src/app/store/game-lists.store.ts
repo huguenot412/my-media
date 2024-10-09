@@ -11,11 +11,13 @@ import {
   addEntities,
   addEntity,
   removeEntity,
+  setAllEntities,
   updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
 import { User } from '../model/users.interfaces';
 import { UsersService } from '../services/users.service';
+import { GamesStore } from './games.store';
 
 type GameListsState = {
   gameLists: GameList[];
@@ -42,20 +44,21 @@ export const GameListsStore = signalStore(
   })),
   withMethods((store) => {
     const usersService = inject(UsersService);
+    const gamesStore = inject(GamesStore);
 
     return {
       setUser(user: User): void {
-        patchState(store, (state) => ({
-          user: {
-            ...state.user,
-            ...user,
-          },
+        patchState(store, () => ({
+          user,
         }));
       },
       setUserToNull(): void {
         patchState(store, () => ({
           user: null,
         }));
+      },
+      setLists(lists: GameList[]): void {
+        patchState(store, setAllEntities(lists));
       },
       addGameLists(lists: GameList[]): void {
         patchState(store, addEntities(lists));
@@ -75,11 +78,12 @@ export const GameListsStore = signalStore(
           })
         );
 
-        const update: Partial<User> = {
-          gameLists: [...store.entities()],
-        };
-
         if (store.user()) {
+          const update: Partial<User> = {
+            gameLists: store.entities(),
+            games: gamesStore.entities(),
+          };
+
           usersService.updateUser(store.user()!.id, update);
         }
       },

@@ -80,7 +80,6 @@ export interface GameListRanking {
 export interface GameList {
   name: string;
   id: string;
-  owner: ListOwner; // TODO: Change to User
   type: GameListType;
   ranked: boolean;
   games: number[];
