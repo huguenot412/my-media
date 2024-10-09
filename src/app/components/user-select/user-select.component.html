@@ -1,0 +1,10 @@
+<mat-form-field class="user-select">
+  <mat-label>
+    Users
+  </mat-label>
+  <mat-select>
+    @for (user of users$ | async; track user.id) {
+      <mat-option [value]="user.username" (click)="setUser(user)">{{ user.firstName + " " + user.lastName }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

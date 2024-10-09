@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-game-lists',
@@ -26,6 +28,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatInputModule,
     MatIconModule,
     ScrollingModule,
+    MatButtonToggleModule,
+    JsonPipe,
   ],
   templateUrl: './game-lists.component.html',
   styleUrl: './game-lists.component.scss',
@@ -39,10 +43,6 @@ export class GameListsComponent {
     const list: GameList = {
       name,
       id: name.toLowerCase(),
-      owner: {
-        name: 'Chris Snow',
-        id: 'chris_snow',
-      },
       type: 'user',
       ranked: false,
       games: [],

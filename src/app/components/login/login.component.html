@@ -1,4 +1,4 @@
-<!-- <h1>Welcome</h1>
+<h1>Welcome</h1>
 
 <h2>Sign in</h2>
 
@@ -11,7 +11,7 @@
 
   <h2>Create new account</h2>
 
-  <input [(ngModel)]="loginForm.firstname" type="text" placeholder="First name">
+  <input [(ngModel)]="loginForm.firstName" type="text" placeholder="First name">
   <input [(ngModel)]="loginForm.lastName" type="text" placeholder="Last name">
   <input [(ngModel)]="loginForm.newUsername" type="text" placeholder="UserName">
   <input [(ngModel)]="loginForm.newPassword" type="text" placeholder="Password">
@@ -21,4 +21,7 @@
 @if (errorMessage()){
   <p>{{ errorMessage()}}</p>
 }
- -->
+
+<p>Select User</p>
+<app-user-select (userSet)="navigateToLists()"/>
+

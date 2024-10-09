@@ -1,11 +1,16 @@
 import { GameList, UserGame } from './games.interfaces';
 
-export interface User {
-  id: number;
+export interface UserConfig {
   firstName: string;
   lastName: string;
   username: string;
-  password: string;
+}
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
   games: UserGame[];
   gameLists: GameList[];
   friendIds: number[];

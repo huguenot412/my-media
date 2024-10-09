@@ -29,3 +29,10 @@
 .search {
   flex: 0 1 300px;
 }
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}

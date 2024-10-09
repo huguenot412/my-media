@@ -20,7 +20,7 @@ export class GamesService {
   getGamesByName(name: string): Observable<Game[]> {
     return this.http.post<Game[]>(
       this.baseUrl + 'games',
-      `fields name, cover.url, cover.width, cover.height; where parent_game = null; search "${name}"; limit 50;`,
+      `fields name, cover.url, cover.width, cover.height; search "${name}"; limit 50;`,
       { headers: this.headers }
     );
   }
