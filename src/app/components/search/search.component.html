@@ -17,7 +17,7 @@
 @if (!searchResults?.length && searchQuery) {
   <p>Loading...</p>
 } @else {
-  <cdk-virtual-scroll-viewport appendOnly itemSize="50" class="search-results">
+  <cdk-virtual-scroll-viewport appendOnly itemSize="10" class="search-results">
     <mat-card appearance="outlined" class="game"  *cdkVirtualFor="let game of searchResults">
       <mat-card-header>
         <mat-card-title>
@@ -54,27 +54,5 @@
       <fa-icon class="info-icon" [icon]="faCircleInfo" [routerLink]="['../game', game.id]"/>
     </mat-card>
   </cdk-virtual-scroll-viewport>
-
-  @for (game of searchResults; track $index) {
-
-    <!-- @if (game.cover?.url) {
-      <div class="cover-art-container">
-        <img class="cover-art" [ngSrc]="game.cover?.url!.replace('t_thumb', 't_cover_big')" alt="Cover Art" fill>
-      </div>
-    }
-    <button (click)="addGame(game, 'playing')">Playing</button>
-    <button (click)="addGame(game, 'played')">Played</button>
-    <button (click)="addGame(game, 'backlog')">Backlog</button>
-    <fa-icon class="info-icon" [icon]="faCircleInfo" [routerLink]="['../game', game.id]"/> -->
-
-    <!-- @if (gameListsStore.userCreatedLists().length) {
-      <select name="lists" id="lists">
-        <option value="" disabled selected>--Choose a list--</option>
-        @for (list of gameListsStore.userCreatedLists(); track list.id) {
-          <option [value]="list" (click)="addGame(game, list.id)">{{ list.name }}</option>
-        }
-      </select>
-    } -->
-  }
 }
 

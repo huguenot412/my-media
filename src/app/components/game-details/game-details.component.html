@@ -1,6 +1,6 @@
 @for (game of game$ | async; track $index) {
   <div class="cover-art-container">
-    <img class="cover-art" [ngSrc]="game.cover?.url!.replace('t_thumb', 't_cover_big_2x')" alt="Cover Art" fill priority>
+    <img class="cover-art" [ngSrc]="game.cover.url!.replace('t_thumb', 't_cover_big_2x')" alt="Cover Art" fill priority>
   </div>
   <h1>{{ game.name }}</h1>
 

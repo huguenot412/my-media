@@ -1,20 +1,29 @@
 <app-search class="search"/>
 
 <div class="lists-container">
-  <form #newListForm="ngForm" (ngSubmit)="addList(this.newListName)">
-    <mat-form-field >
-      <mat-label>Create new list</mat-label>
-      <input matInput type="text" [(ngModel)]="newListName" name="newListName">
-      @if (newListName) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="newListName=''">
-          <mat-icon>close</mat-icon>
-        </button>
-      }
-    </mat-form-field>
-    <button mat-button type="submit" [disabled]="!newListName">Create new list</button>
-    <button mat-button (click)="toggleDetailView()">Switch to {{ detailView() ? 'simple view' : 'detail view'}}</button>
-  </form>
-  <!-- <button mat-button (click)="addList(this.newListName)" [disabled]="!this.newListName">Create new list</button> -->
+  <!-- <pre>{{ gameListsStore.user() | json}}</pre> -->
+  <div class="actions">
+    <form #newListForm="ngForm" (ngSubmit)="addList(this.newListName)">
+      <mat-form-field >
+        <mat-label>Create new list</mat-label>
+        <input matInput type="text" [(ngModel)]="newListName" name="newListName">
+        @if (newListName) {
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="newListName=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+      <button mat-button type="submit" [disabled]="!newListName">Create new list</button>
+    </form>
+    <mat-button-toggle-group>
+      <mat-button-toggle (click)="detailView.set(false)" [checked]="detailView() === false">
+        Simple
+      </mat-button-toggle>
+      <mat-button-toggle (click)="detailView.set(true)" [checked]="detailView() === true">
+        Detailed
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 
   <cdk-virtual-scroll-viewport appendOnly itemSize="10" class="lists-scroll-viewport">
     <div class="lists">

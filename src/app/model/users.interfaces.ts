@@ -1,7 +1,7 @@
 import { GameList, UserGame } from './games.interfaces';
 
 export interface User {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   username: string;

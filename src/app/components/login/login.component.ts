@@ -1,16 +1,32 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../model/users.interfaces';
-import { Router } from 'express';
+import { MatSelectModule } from '@angular/material/select';
+import { GameListsStore } from '../../store/game-lists.store';
+import { collection, collectionData, Firestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { AsyncPipe, JsonPipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { UsersService } from '../../services/users.service';
+MatSelectModule;
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, MatSelectModule, AsyncPipe, JsonPipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  gameListsStore = inject(GameListsStore);
+  usersService = inject(UsersService);
+  router = inject(Router);
+  users$ = this.usersService.getUsers();
+
+  setUser(user: any) {
+    this.gameListsStore.setUser(user);
+    this.router.navigate(['/game-lists']);
+  }
   // loginForm = {
   //   username: '',
   //   password: '',
