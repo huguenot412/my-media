@@ -1,1 +1,32 @@
-<p>feed works!</p>
+<app-user-select (userSet)="friend.set($event)"/>
+<button mat-button (click)="sendFriendRequest()">Send friend request</button>
+
+<p>Pending Friend Requests</p>
+
+<p>Sent:</p>
+@if (pendingFriendRequestsSent()?.length) {
+  <ul>
+    @for (friendRequest of pendingFriendRequestsSent(); track friendRequest.id) {
+      <li>
+        <p>{{ friendRequest.sentToUsername }}</p>
+      </li>
+    }
+  </ul>
+} @else {
+  <p>No requests sent.</p>
+}
+
+<p>Received:</p>
+@if (pendingFriendRequestsReceived()?.length) {
+  <ul>
+    @for (friendRequest of pendingFriendRequestsReceived(); track friendRequest.id) {
+      <li>
+        <p>{{ friendRequest.sentByUsername }}</p>
+        <button mat-button (click)="acceptFriendRequest(friendRequest.id!)">Accept</button>
+        <button mat-button (click)="denyFriendRequest(friendRequest.id!)">Deny</button>
+      </li>
+    }
+  </ul>
+} @else {
+  <p>No requests received.</p>
+}

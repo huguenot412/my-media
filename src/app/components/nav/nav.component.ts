@@ -1,7 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { UserSelectComponent } from '../user-select/user-select.component';
+import { GameListsStore } from '../../store/game-lists.store';
+import { GamesStore } from '../../store/games.store';
+import { UserStore } from '../../store/user.store';
+import { User } from '../../model/users.interfaces';
 
 interface NavLink {
   displayName: string;
@@ -16,6 +20,9 @@ interface NavLink {
   styleUrl: './nav.component.scss',
 })
 export class NavComponent {
+  gameListsStore = inject(GameListsStore);
+  gamesStore = inject(GamesStore);
+  userStore = inject(UserStore);
   links = signal<NavLink[]>([
     {
       displayName: 'Login',
@@ -42,4 +49,10 @@ export class NavComponent {
       path: 'recommendations',
     },
   ]);
+
+  setUser(user: User): void {
+    this.userStore.setUser(user);
+    this.gamesStore.setGames(user.games);
+    this.gameListsStore.setLists(user.gameLists);
+  }
 }

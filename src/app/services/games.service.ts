@@ -66,12 +66,14 @@ export class GamesService {
     this.userService.updateUser(update);
   }
 
-  updateGameNote(gameId: number, listId: string): void {
-    this.gamesStore.updateGameNote(gameId, listId);
+  updateGameNote(gameId: number, note: string): void {
+    this.gamesStore.updateGameNote(gameId, note);
 
     const update: Partial<User> = {
       games: this.gamesStore.entities(),
     };
+
+    debugger;
 
     this.userService.updateUser(update);
   }

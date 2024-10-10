@@ -16,16 +16,10 @@ import { UserStore } from '../../store/user.store';
 })
 export class UserSelectComponent {
   userService = inject(UserService);
-  gameListsStore = inject(GameListsStore);
-  gamesStore = inject(GamesStore);
-  userStore = inject(UserStore);
   users$ = this.userService.getUsers();
-  userSet = output<void>();
+  userSet = output<User>();
 
   setUser(user: User) {
-    this.userStore.setUser(user);
-    this.gamesStore.setGames(user.games);
-    this.gameListsStore.setLists(user.gameLists);
-    this.userSet.emit();
+    this.userSet.emit(user);
   }
 }

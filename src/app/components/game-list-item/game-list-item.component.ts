@@ -71,7 +71,7 @@ export class GameListItemComponent implements OnInit {
   }
 
   updateGameNote(): void {
-    this.gamesService.updateGameNote(this.game().id, this.listId());
+    this.gamesService.updateGameNote(this.game().id, this.note);
     this.toggleEditNote();
   }
 

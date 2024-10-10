@@ -28,7 +28,7 @@
           <div class="edit-note">
             <mat-form-field>
               <mat-label>Add a note</mat-label>
-              <textarea matInput [value]="this.game().note" resize="vertical">{{ this.game().note }}</textarea>
+              <textarea matInput [value]="this.note" [(ngModel)]="this.note" resize="vertical">{{ this.note }}</textarea>
             </mat-form-field>
             <button mat-button (click)="updateGameNote()">Save note</button>
           </div>
