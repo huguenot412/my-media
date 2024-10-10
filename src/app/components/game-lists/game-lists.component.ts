@@ -13,6 +13,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { JsonPipe } from '@angular/common';
+import { UserService } from '../../services/users.service';
+import { UserStore } from '../../store/user.store';
+import { User } from '../../model/users.interfaces';
 
 @Component({
   selector: 'app-game-lists',
@@ -36,6 +39,8 @@ import { JsonPipe } from '@angular/common';
 })
 export class GameListsComponent {
   gameListsStore = inject(GameListsStore);
+  userService = inject(UserService);
+  userStore = inject(UserStore);
   newListName = '';
   detailView = signal(false);
 
@@ -49,6 +54,12 @@ export class GameListsComponent {
     };
 
     this.gameListsStore.addList(list);
+
+    const update: Partial<User> = {
+      gameLists: this.gameListsStore.entities(),
+    };
+
+    this.userService.updateUser(update);
   }
 
   toggleDetailView(): void {

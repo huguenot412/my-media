@@ -1,10 +1,11 @@
 import { Component, inject, output } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
-import { UsersService } from '../../services/users.service';
+import { UserService } from '../../services/users.service';
 import { AsyncPipe } from '@angular/common';
 import { User } from '../../model/users.interfaces';
 import { GameListsStore } from '../../store/game-lists.store';
 import { GamesStore } from '../../store/games.store';
+import { UserStore } from '../../store/user.store';
 
 @Component({
   selector: 'app-user-select',
@@ -14,14 +15,15 @@ import { GamesStore } from '../../store/games.store';
   styleUrl: './user-select.component.scss',
 })
 export class UserSelectComponent {
-  usersService = inject(UsersService);
+  userService = inject(UserService);
   gameListsStore = inject(GameListsStore);
   gamesStore = inject(GamesStore);
-  users$ = this.usersService.getUsers();
+  userStore = inject(UserStore);
+  users$ = this.userService.getUsers();
   userSet = output<void>();
 
   setUser(user: User) {
-    this.gameListsStore.setUser(user);
+    this.userStore.setUser(user);
     this.gamesStore.setGames(user.games);
     this.gameListsStore.setLists(user.gameLists);
     this.userSet.emit();

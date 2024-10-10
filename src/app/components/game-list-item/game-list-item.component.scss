@@ -23,7 +23,8 @@
   gap: 20px;
 
   &:hover {
-    .trash {
+    .trash,
+    .info-icon {
       visibility: visible;
     }
   }
@@ -35,6 +36,7 @@
   gap: 10px;
   justify-content: flex-start;
   align-items: center;
+  cursor: grab;
 }
 
 .trash {
@@ -59,6 +61,7 @@ textarea {
 
 .list-item {
   display: flex;
+  width: 100%;
 }
 
 p {
@@ -69,4 +72,41 @@ p {
   font-weight: 700;
   flex: 0 0 30px;
   text-align: center;
+}
+
+.info-icon {
+  cursor: pointer;
+  color: #333;
+  visibility: hidden;
+}
+
+.detail-view {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.note {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.note-prompt {
+  font-style: italic;
+  font-weight: 400;
+  font-size: .8rem;
+}
+
+.edit-note {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.mat-mdc-card-content,
+.mat-mdc-card-content:last-child,
+.mat-mdc-card-content:first-child {
+  padding: 10px;
 }

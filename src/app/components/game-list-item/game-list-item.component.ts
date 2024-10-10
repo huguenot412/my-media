@@ -10,12 +10,24 @@ import { RatingComponent } from '../rating/rating.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 import { UserGame } from '../../model/games.interfaces';
-import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleInfo,
+  faPenToSquare,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { GamesStore } from '../../store/games.store';
 import { FormsModule } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
 import { GameListsStore } from '../../store/game-lists.store';
 import { MatCardModule } from '@angular/material/card';
+import { UserStore } from '../../store/user.store';
+import { User } from '../../model/users.interfaces';
+import { UserService } from '../../services/users.service';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormField, MatInputModule } from '@angular/material/input';
+import { ListSelectComponent } from '../list-select/list-select.component';
+import { GamesService } from '../../services/games.service';
 
 @Component({
   selector: 'app-game-list-item',
@@ -27,6 +39,11 @@ import { MatCardModule } from '@angular/material/card';
     FormsModule,
     NgOptimizedImage,
     MatCardModule,
+    DragDropModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormField,
+    ListSelectComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './game-list-item.component.html',
@@ -34,11 +51,11 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class GameListItemComponent implements OnInit {
   game = input.required<UserGame>();
-  gamesStore = inject(GamesStore);
-  gameListsStore = inject(GameListsStore);
+  gamesService = inject(GamesService);
   listId = input.required<string>();
   faTrash = faTrash;
   faPenToSquare = faPenToSquare;
+  faCircleInfo = faCircleInfo;
   note = '';
   detailView = input.required<boolean>();
   rankedView = input.required<boolean>();
@@ -50,11 +67,11 @@ export class GameListItemComponent implements OnInit {
   }
 
   deleteGameFromList(): void {
-    this.gameListsStore.removeGameFromList(this.listId(), this.game().id);
+    this.gamesService.deleteGameFromList(this.game().id, this.listId());
   }
 
   updateGameNote(): void {
-    this.gamesStore.updateGameNote(this.game().id, this.note);
+    this.gamesService.updateGameNote(this.game().id, this.listId());
     this.toggleEditNote();
   }
 

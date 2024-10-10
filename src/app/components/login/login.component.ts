@@ -5,9 +5,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { GameListsStore } from '../../store/game-lists.store';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { UsersService } from '../../services/users.service';
+import { UserService } from '../../services/users.service';
 import { GamesStore } from '../../store/games.store';
 import { UserSelectComponent } from '../user-select/user-select.component';
+import { UserStore } from '../../store/user.store';
 MatSelectModule;
 
 interface LoginForm {
@@ -37,7 +38,8 @@ type LoginFormKey = keyof LoginForm;
 export class LoginComponent {
   gameListsStore = inject(GameListsStore);
   gamesStore = inject(GamesStore);
-  usersService = inject(UsersService);
+  userStore = inject(UserStore);
+  userService = inject(UserService);
   router = inject(Router);
 
   loginForm = {
@@ -52,7 +54,7 @@ export class LoginComponent {
   users = signal<User[]>([]);
 
   setUser(user: User) {
-    this.gameListsStore.setUser(user);
+    this.userStore.setUser(user);
     this.gamesStore.setGames(user.games);
     this.gameListsStore.setLists(user.gameLists);
     this.navigateToLists();
@@ -86,7 +88,7 @@ export class LoginComponent {
   createNewUser(): void {
     const { firstName, lastName, newUsername: username } = this.loginForm;
     const config: UserConfig = { firstName, lastName, username };
-    this.usersService.createNewUser(config);
+    this.userService.createNewUser(config);
     this.resetLoginForm();
   }
 }

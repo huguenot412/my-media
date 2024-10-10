@@ -6,7 +6,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { GameList } from '../model/games.interfaces';
-import { computed, inject } from '@angular/core';
+import { computed } from '@angular/core';
 import {
   addEntities,
   addEntity,
@@ -15,22 +15,15 @@ import {
   updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
-import { User } from '../model/users.interfaces';
-import { UsersService } from '../services/users.service';
-import { GamesStore } from './games.store';
 
 type GameListsState = {
   gameLists: GameList[];
   isLoaded: boolean;
-  user: User | null;
-  users: User[];
 };
 
 const initialState: GameListsState = {
   gameLists: [],
   isLoaded: false,
-  user: null,
-  users: [],
 };
 
 export const GameListsStore = signalStore(
@@ -41,22 +34,12 @@ export const GameListsStore = signalStore(
     userCreatedLists: computed(() =>
       entities().filter((list) => list.type === 'user')
     ),
+    defaultLists: computed(() =>
+      entities().filter((list) => list.type === 'default')
+    ),
   })),
   withMethods((store) => {
-    const usersService = inject(UsersService);
-    const gamesStore = inject(GamesStore);
-
     return {
-      setUser(user: User): void {
-        patchState(store, () => ({
-          user,
-        }));
-      },
-      setUserToNull(): void {
-        patchState(store, () => ({
-          user: null,
-        }));
-      },
       setLists(lists: GameList[]): void {
         patchState(store, setAllEntities(lists));
       },
@@ -77,15 +60,6 @@ export const GameListsStore = signalStore(
             changes: { games: [...store.entityMap()[listId].games, gameId] },
           })
         );
-
-        if (store.user()) {
-          const update: Partial<User> = {
-            gameLists: store.entities(),
-            games: gamesStore.entities(),
-          };
-
-          usersService.updateUser(store.user()!.id, update);
-        }
       },
       // Used for updating game order after drag and drop
       updateListGames(listId: string, gameIds: number[]): void {

@@ -4,6 +4,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { NgClass } from '@angular/common';
 import { GamesStore } from '../../store/games.store';
+import { User } from '../../model/users.interfaces';
+import { GameListsStore } from '../../store/game-lists.store';
+import { UserService } from '../../services/users.service';
 
 @Component({
   selector: 'app-rating',
@@ -13,6 +16,8 @@ import { GamesStore } from '../../store/games.store';
   styleUrl: './rating.component.scss',
 })
 export class RatingComponent implements OnInit {
+  gameListsStore = inject(GameListsStore);
+  userService = inject(UserService);
   rating = input.required<Rating>();
   gameId = input.required<number>();
   gamesStore = inject(GamesStore);
@@ -27,5 +32,11 @@ export class RatingComponent implements OnInit {
 
   updateGameRating(id: number, score: number): void {
     this.gamesStore.updateGameRating(id, score);
+
+    const update: Partial<User> = {
+      games: this.gamesStore.entities(),
+    };
+
+    this.userService.updateUser(update);
   }
 }
