@@ -1,5 +1,10 @@
 :host {
   --star-gold: #ffcc33;
+
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .star {
@@ -16,10 +21,6 @@
 }
 
 :host:hover {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-
   .clear-rank {
     display: inline-block;
     cursor: pointer;

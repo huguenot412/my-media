@@ -22,7 +22,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { UserStore } from '../../store/user.store';
 import { UserService as UserService } from '../../services/users.service';
-import { User } from '../../model/users.interfaces';
+import { ListSelectComponent } from '../list-select/list-select.component';
 
 @Component({
   selector: 'app-search',
@@ -40,6 +40,7 @@ import { User } from '../../model/users.interfaces';
     MatButtonModule,
     MatSelectModule,
     ScrollingModule,
+    ListSelectComponent,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -73,20 +74,12 @@ export class SearchComponent implements OnDestroy {
     this.searchResults$ = this.gamesService.getGamesByName(this.searchQuery);
   }
 
-  addGame(game: Game, listId: string): void {
-    this.gamesStore.addGame(game);
-    this.gameListsStore.addGameToList(listId, game.id);
-
-    const update: Partial<User> = {
-      gameLists: this.gameListsStore.entities(),
-      games: this.gamesStore.entities(),
-    };
-
-    this.userService.updateUser(update);
-  }
-
   onInputChange(): void {
     this.searchSubject$.next();
+  }
+
+  addGame(game: Game, listId: string): void {
+    this.gamesService.addGame(game, listId);
   }
 
   ngOnDestroy(): void {

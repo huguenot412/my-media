@@ -5,7 +5,7 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Game, GameList, UserGame } from '../../model/games.interfaces';
+import { GameList, UserGame } from '../../model/games.interfaces';
 import { GameListItemComponent } from '../game-list-item/game-list-item.component';
 import {
   CdkDragDrop,
@@ -57,14 +57,22 @@ export class GameListComponent {
 
   setRankedView(ranked: boolean): void {
     this.gameListsStore.setRanked(this.list().id, ranked);
-  }
 
-  toggleRankedView(): void {
-    this.gameListsStore.setRanked(this.list().id, !this.rankedView());
+    const update: Partial<User> = {
+      gameLists: this.gameListsStore.entities(),
+    };
+
+    this.userService.updateUser(update);
   }
 
   deleteList(listId: string): void {
     this.gameListsStore.deleteList(listId);
+
+    const update: Partial<User> = {
+      gameLists: this.gameListsStore.entities(),
+    };
+
+    this.userService.updateUser(update);
   }
 
   onDrop(event: CdkDragDrop<UserGame[]>): void {

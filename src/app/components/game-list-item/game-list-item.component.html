@@ -1,16 +1,17 @@
 <mat-card class="list-item">
   <mat-card-content>
     <div class="game">
-      <div class="game-name">
+      <div class="game-name" cdkDragHandle>
         @if (rankedView()) {
             <p class="rank">{{ rank() }}</p>
         }
         <div class="cover-art-container">
           <img class="cover-art" [ngSrc]="game().cover.url!" alt="Cover Art" fill>
         </div>
-        <p [routerLink]="['../game', game().id]">{{ game().name }}</p>
+        <p>{{ game().name }}</p>
 
       </div>
+      <fa-icon class="info-icon" [icon]="faCircleInfo" [routerLink]="['../game', game().id]"/>
       <fa-icon
         class="trash"
         [icon]="faTrash"
@@ -20,18 +21,33 @@
 
 
     @if (detailView()) {
-      <app-rating [rating]="game().rating" [gameId]="game().id"/>
+      <div class="detail-view">
+        <app-rating [rating]="game().rating" [gameId]="game().id"/>
 
-      @if (editNote()) {
-        <textarea [(ngModel)]="note" [value]="this.game().note" resize="vertical">{{ this.game().note }}</textarea>
-        <button (click)="updateGameNote()">Save note</button>
-      } @else {
-        <p>{{ game().note ? game().note : 'Add a note' }}</p>
-      }
-      <fa-icon
-        [icon]="faPenToSquare"
-        (click)=" toggleEditNote()"
-      />
+        @if (editNote()) {
+          <div class="edit-note">
+            <mat-form-field>
+              <mat-label>Add a note</mat-label>
+              <textarea matInput [value]="this.game().note" resize="vertical">{{ this.game().note }}</textarea>
+            </mat-form-field>
+            <button mat-button (click)="updateGameNote()">Save note</button>
+          </div>
+        } @else {
+          <div class="note">
+            @if (game().note) {
+              <p>{{ game().note }}</p>
+            } @else {
+              <p class="note-prompt">Add a note</p>
+            }
+            <fa-icon
+              [icon]="faPenToSquare"
+              (click)=" toggleEditNote()"
+            />
+          </div>
+        }
+
+        <app-list-select [game]="game()" [showModeToggle]="true" [listId]="listId()"/>
+      </div>
     }
   </mat-card-content>
 </mat-card>

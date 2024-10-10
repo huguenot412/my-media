@@ -34,6 +34,9 @@ export const GameListsStore = signalStore(
     userCreatedLists: computed(() =>
       entities().filter((list) => list.type === 'user')
     ),
+    defaultLists: computed(() =>
+      entities().filter((list) => list.type === 'default')
+    ),
   })),
   withMethods((store) => {
     return {

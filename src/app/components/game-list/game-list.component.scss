@@ -49,4 +49,23 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 10px;
+  justify-content: space-between;
+}
+
+.toggles {
+  display: flex;
+  gap: 10px;
+}
+
+mat-card {
+  padding: 10px;
+}
+
+mat-card-content {
+  padding: 0;
+}
+
+.cdk-drop-list {
+  padding: 0;
 }

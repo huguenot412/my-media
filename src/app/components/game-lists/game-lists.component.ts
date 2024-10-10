@@ -15,6 +15,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { JsonPipe } from '@angular/common';
 import { UserService } from '../../services/users.service';
 import { UserStore } from '../../store/user.store';
+import { User } from '../../model/users.interfaces';
 
 @Component({
   selector: 'app-game-lists',
@@ -53,6 +54,12 @@ export class GameListsComponent {
     };
 
     this.gameListsStore.addList(list);
+
+    const update: Partial<User> = {
+      gameLists: this.gameListsStore.entities(),
+    };
+
+    this.userService.updateUser(update);
   }
 
   toggleDetailView(): void {

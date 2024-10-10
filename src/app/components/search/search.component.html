@@ -44,16 +44,7 @@
           <li><button mat-button (click)="addGame(game, 'backlog')">Backlog</button></li>
           @if (gameListsStore.userCreatedLists().length) {
             <li>
-              <mat-form-field class="list-select">
-                <mat-label>
-                  Custom lists
-                </mat-label>
-                <mat-select>
-                  @for (list of gameListsStore.userCreatedLists(); track list.id) {
-                    <mat-option [value]="list" (click)="addGame(game, list.id)">{{ list.name }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
+              <app-list-select [game]="game" showLists="user"/>
             </li>
           }
         </ul>

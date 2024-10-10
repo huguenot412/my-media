@@ -1,0 +1,16 @@
+<mat-form-field class="list-select">
+  <mat-label>
+    {{ mode() === 'add' ? 'Add game to list' : 'Move game to list' }}
+  </mat-label>
+  <mat-select>
+    @for (list of listsToShow(); track list.id) {
+      <mat-option [value]="list" (click)="handleListSelect(list.id)">{{ list.name }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+@if (showModeToggle()) {
+  <mat-button-toggle-group>
+    <mat-button-toggle value="add" (click)="mode.set('add')" [checked]="mode() === 'add'">Add</mat-button-toggle>
+    <mat-button-toggle value="move" (click)="mode.set('move')" [checked]="mode() === 'move'">Move</mat-button-toggle>
+  </mat-button-toggle-group>
+}
