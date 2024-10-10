@@ -28,6 +28,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@ngrx/operators": "^18.1.0",
     "@ngrx/signals": "^18.0.2",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",

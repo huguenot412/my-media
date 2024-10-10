@@ -16,7 +16,14 @@
 
 @if (!searchResults?.length && searchQuery) {
   <p>Loading...</p>
-} @else {
+} @else if(!searchResults?.length) {
+  <div class="search-prompt">
+    <fa-icon class="search-icon" [icon]="faMagnifyingGlass" />
+    <p>Search for games to add to your lists</p>
+  </div>
+}
+
+@else {
   <cdk-virtual-scroll-viewport appendOnly itemSize="10" class="search-results">
     <mat-card appearance="outlined" class="game"  *cdkVirtualFor="let game of searchResults">
       <mat-card-header>

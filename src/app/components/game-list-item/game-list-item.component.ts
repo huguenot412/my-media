@@ -16,6 +16,9 @@ import { FormsModule } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
 import { GameListsStore } from '../../store/game-lists.store';
 import { MatCardModule } from '@angular/material/card';
+import { UserStore } from '../../store/user.store';
+import { User } from '../../model/users.interfaces';
+import { UserService } from '../../services/users.service';
 
 @Component({
   selector: 'app-game-list-item',
@@ -36,6 +39,7 @@ export class GameListItemComponent implements OnInit {
   game = input.required<UserGame>();
   gamesStore = inject(GamesStore);
   gameListsStore = inject(GameListsStore);
+  userService = inject(UserService);
   listId = input.required<string>();
   faTrash = faTrash;
   faPenToSquare = faPenToSquare;
@@ -51,6 +55,13 @@ export class GameListItemComponent implements OnInit {
 
   deleteGameFromList(): void {
     this.gameListsStore.removeGameFromList(this.listId(), this.game().id);
+
+    const update: Partial<User> = {
+      gameLists: this.gameListsStore.entities(),
+      games: this.gamesStore.entities(),
+    };
+
+    this.userService.updateUser(update);
   }
 
   updateGameNote(): void {

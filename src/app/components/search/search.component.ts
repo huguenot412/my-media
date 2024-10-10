@@ -9,7 +9,10 @@ import { GamesStore } from '../../store/games.store';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleInfo,
+  faMagnifyingGlass,
+} from '@fortawesome/free-solid-svg-icons';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +20,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { UserStore } from '../../store/user.store';
+import { UserService as UserService } from '../../services/users.service';
+import { User } from '../../model/users.interfaces';
 
 @Component({
   selector: 'app-search',
@@ -41,12 +47,15 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 export class SearchComponent implements OnDestroy {
   gamesService = inject(GamesService);
   gameListsStore = inject(GameListsStore);
+  userStore = inject(UserStore);
   gamesStore = inject(GamesStore);
+  userService = inject(UserService);
   searchQuery = '';
   searchResults$: Observable<Game[]> = of([]);
   searchSubject$ = new Subject<void>();
   searchSubjectSub!: Subscription;
   faCircleInfo = faCircleInfo;
+  faMagnifyingGlass = faMagnifyingGlass;
 
   constructor() {
     this.searchSubjectSub = this.searchSubject$
@@ -67,6 +76,13 @@ export class SearchComponent implements OnDestroy {
   addGame(game: Game, listId: string): void {
     this.gamesStore.addGame(game);
     this.gameListsStore.addGameToList(listId, game.id);
+
+    const update: Partial<User> = {
+      gameLists: this.gameListsStore.entities(),
+      games: this.gamesStore.entities(),
+    };
+
+    this.userService.updateUser(update);
   }
 
   onInputChange(): void {
