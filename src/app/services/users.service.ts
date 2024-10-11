@@ -11,9 +11,11 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
-import { FriendRequest, User, UserConfig } from '../model/users.interfaces';
+import { Friend, FriendRequest, User, UserConfig } from '../model/users.interfaces';
 import { UserStore } from '../store/user.store';
 import { GameList } from '../model/games.interfaces';
+import { GameListsStore } from '../store/game-lists.store';
+import { GamesStore } from '../store/games.store';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +23,10 @@ import { GameList } from '../model/games.interfaces';
 export class UserService {
   private usersCollection: CollectionReference;
   private friendRequestsCollection: CollectionReference;
-  user = inject(UserStore).user;
+  userStore = inject(UserStore);
+  gameListsStore = inject(GameListsStore);
+  gamesStore = inject(GamesStore);
+  user = this.userStore.user;
   firestore: Firestore = inject(Firestore);
   users$: Observable<any>;
   friendRequestsSent$: Observable<FriendRequest[]> = of([]);
@@ -34,6 +39,13 @@ export class UserService {
       'friendRequests'
     );
     this.users$ = collectionData(this.usersCollection, { idField: 'id' });
+  }
+
+  setUser(user: User): void {
+      this.userStore.setUser(user);
+      this.userStore.setFriends(user.friends);
+      this.gamesStore.setGames(user.games);
+      this.gameListsStore.setLists(user.gameLists);
   }
 
   getUsers(): Observable<User[]> {
@@ -57,6 +69,19 @@ export class UserService {
       friendRequestId
     );
     updateDoc(friendRequestDoc, update);
+  }
+
+  addFriend(user: User, friendRequest: FriendRequest): void {
+    const friend: Friend = {
+      id: friendRequest.id!,
+      username: friendRequest.sentByUsername,
+      friendRequest,
+    }
+    const update: Partial<User> = {
+      friends: [...user.friends, friend]
+    }
+    this.userStore.addFriend(friend);
+    this.updateUser(update);
   }
 
   createNewUser(config: UserConfig): void {
@@ -86,10 +111,6 @@ export class UserService {
       addDoc(collection(this.firestore, 'friendRequests'), friendRequest);
     }
   }
-
-  acceptFriendRequest(): void {}
-
-  denyFriendRequest(): void {}
 
   getPendingFriendRequestsSent(): Observable<FriendRequest[]> {
     if (this.user()) {

@@ -21,8 +21,6 @@ type FriendRequestStatus = 'pending' | 'accepted' | 'denied';
 export interface Friend {
   id: string;
   username: string;
-  firstName: string;
-  lastName: string;
   friendRequest: FriendRequest;
 }
 

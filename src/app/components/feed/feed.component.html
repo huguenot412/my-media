@@ -22,7 +22,7 @@
     @for (friendRequest of pendingFriendRequestsReceived(); track friendRequest.id) {
       <li>
         <p>{{ friendRequest.sentByUsername }}</p>
-        <button mat-button (click)="acceptFriendRequest(friendRequest.id!)">Accept</button>
+        <button mat-button (click)="acceptFriendRequest(friendRequest)">Accept</button>
         <button mat-button (click)="denyFriendRequest(friendRequest.id!)">Deny</button>
       </li>
     }
@@ -30,3 +30,10 @@
 } @else {
   <p>No requests received.</p>
 }
+
+<p>My Friends:</p>
+<ul>
+  @for (friend of user()?.friends; track friend.id) {
+    <p>{{ friend.username }}</p>
+  }
+</ul>

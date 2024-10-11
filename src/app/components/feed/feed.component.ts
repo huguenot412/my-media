@@ -7,6 +7,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { FriendRequest, User } from '../../model/users.interfaces';
 import { UserSelectComponent } from '../user-select/user-select.component';
+import { UserStore } from '../../store/user.store';
 
 @Component({
   selector: 'app-feed',
@@ -24,6 +25,7 @@ import { UserSelectComponent } from '../user-select/user-select.component';
 })
 export class FeedComponent implements OnInit {
   userService = inject(UserService);
+  user = inject(UserStore).user;
   pendingFriendRequestsSent: Signal<FriendRequest[] | undefined>;
   pendingFriendRequestsReceived: Signal<FriendRequest[] | undefined>;
   friend = signal<User | null>(null);
@@ -48,14 +50,18 @@ export class FeedComponent implements OnInit {
     }
   }
 
-  acceptFriendRequest(friendRequestId: string): void {
-    const update: Partial<FriendRequest> = {
+  acceptFriendRequest(friendRequest: FriendRequest): void {
+    const update: FriendRequest= {
+      ...friendRequest,
       status: 'accepted',
       timeAcknowledged: JSON.stringify(new Date()),
     };
-    this.userService.updateFriendRequest(friendRequestId, update);
+
+    this.userService.updateFriendRequest(friendRequest.id!, update);
+    this.userService.addFriend(this.user()!, update);
 
     // TODO: Add friends to friend lists once request has been accepted
+
   }
 
   denyFriendRequest(friendRequestId: string): void {

@@ -6,6 +6,7 @@ import { GameListsStore } from '../../store/game-lists.store';
 import { GamesStore } from '../../store/games.store';
 import { UserStore } from '../../store/user.store';
 import { User } from '../../model/users.interfaces';
+import { UserService } from '../../services/users.service';
 
 interface NavLink {
   displayName: string;
@@ -21,8 +22,7 @@ interface NavLink {
 })
 export class NavComponent {
   gameListsStore = inject(GameListsStore);
-  gamesStore = inject(GamesStore);
-  userStore = inject(UserStore);
+  userService = inject(UserService);
   links = signal<NavLink[]>([
     {
       displayName: 'Login',
@@ -51,8 +51,6 @@ export class NavComponent {
   ]);
 
   setUser(user: User): void {
-    this.userStore.setUser(user);
-    this.gamesStore.setGames(user.games);
-    this.gameListsStore.setLists(user.gameLists);
+    this.userService.setUser(user);
   }
 }

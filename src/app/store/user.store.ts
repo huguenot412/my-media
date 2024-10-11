@@ -8,7 +8,8 @@ import {
 import { GamesStore } from './games.store';
 import { computed, inject } from '@angular/core';
 import { GameListsStore } from './game-lists.store';
-import { User } from '../model/users.interfaces';
+import { Friend, User } from '../model/users.interfaces';
+import { addEntities, addEntity, setAllEntities, withEntities } from '@ngrx/signals/entities';
 
 type UserState = {
   userFromApi: User | null;
@@ -21,7 +22,8 @@ const initialState: UserState = {
 export const UserStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed(({ userFromApi }) => {
+  withEntities<Friend>(),
+  withComputed(({ userFromApi, entities }) => {
     const gamesStore = inject(GamesStore);
     const gameListsStore = inject(GameListsStore);
 
@@ -34,6 +36,7 @@ export const UserStore = signalStore(
             ...localUser,
             games: gamesStore.entities(),
             gameLists: gameListsStore.entities(),
+            friends: entities(),
           };
         }
 
@@ -46,6 +49,12 @@ export const UserStore = signalStore(
       patchState(store, () => ({
         userFromApi: user,
       }));
+    },
+    setFriends(friends: Friend[]): void {
+      patchState(store, setAllEntities(friends))
+    },
+    addFriend(friend: Friend): void {
+      patchState(store, addEntity(friend))
     },
   }))
 );

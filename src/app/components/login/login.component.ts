@@ -36,12 +36,8 @@ type LoginFormKey = keyof LoginForm;
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  gameListsStore = inject(GameListsStore);
-  gamesStore = inject(GamesStore);
-  userStore = inject(UserStore);
   userService = inject(UserService);
   router = inject(Router);
-
   loginForm = {
     username: '',
     password: '',
@@ -54,9 +50,7 @@ export class LoginComponent {
   users = signal<User[]>([]);
 
   setUser(user: User) {
-    this.userStore.setUser(user);
-    this.gamesStore.setGames(user.games);
-    this.gameListsStore.setLists(user.gameLists);
+    this.userService.setUser(user);
     this.navigateToLists();
   }
 
