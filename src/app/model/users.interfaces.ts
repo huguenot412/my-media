@@ -16,12 +16,11 @@ export interface User {
   friends: Friend[];
 }
 
-type FriendRequestStatus = 'pending' | 'accepted' | 'denied';
+type FriendRequestStatus = 'pending' | 'accepted' | 'denied' | 'completed';
 
 export interface Friend {
   id: string;
-  username: string;
-  friendRequest: FriendRequest;
+  friendRequestId: string;
 }
 
 export interface FriendRequest {

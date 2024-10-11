@@ -1,5 +1,5 @@
 <mat-nav-list>
-  <app-user-select (userSet)="setUser($event)"/>
+  <!-- <app-user-select (userSet)="setUser($event)"/> -->
   @for (link of links(); track link.path) {
     <a mat-list-item [routerLink]="[link.path]">{{ link.displayName }}</a>
   }

@@ -34,6 +34,6 @@
 <p>My Friends:</p>
 <ul>
   @for (friend of user()?.friends; track friend.id) {
-    <p>{{ friend.username }}</p>
+    <p>{{ friend.id }}</p>
   }
 </ul>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, Signal } from '@angular/core';
+import { Component, inject, signal, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -23,7 +23,7 @@ import { UserStore } from '../../store/user.store';
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss',
 })
-export class FeedComponent implements OnInit {
+export class FeedComponent {
   userService = inject(UserService);
   user = inject(UserStore).user;
   pendingFriendRequestsSent: Signal<FriendRequest[] | undefined>;
@@ -39,8 +39,6 @@ export class FeedComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
-
   sendFriendRequest(): void {
     if (this.friend() && this.friend()?.id) {
       this.userService.sendFriendRequest(
@@ -51,17 +49,18 @@ export class FeedComponent implements OnInit {
   }
 
   acceptFriendRequest(friendRequest: FriendRequest): void {
-    const update: FriendRequest= {
+    const update: FriendRequest = {
       ...friendRequest,
       status: 'accepted',
       timeAcknowledged: JSON.stringify(new Date()),
     };
 
     this.userService.updateFriendRequest(friendRequest.id!, update);
-    this.userService.addFriend(this.user()!, update);
-
-    // TODO: Add friends to friend lists once request has been accepted
-
+    this.userService.addFriend(
+      this.user()!,
+      friendRequest.id!,
+      friendRequest.sentById
+    );
   }
 
   denyFriendRequest(friendRequestId: string): void {

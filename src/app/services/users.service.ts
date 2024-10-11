@@ -11,7 +11,12 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
-import { Friend, FriendRequest, User, UserConfig } from '../model/users.interfaces';
+import {
+  Friend,
+  FriendRequest,
+  User,
+  UserConfig,
+} from '../model/users.interfaces';
 import { UserStore } from '../store/user.store';
 import { GameList } from '../model/games.interfaces';
 import { GameListsStore } from '../store/game-lists.store';
@@ -31,6 +36,7 @@ export class UserService {
   users$: Observable<any>;
   friendRequestsSent$: Observable<FriendRequest[]> = of([]);
   friendRequestsReceived$: Observable<FriendRequest[]> = of([]);
+  friendRequestsAccepted$: Observable<FriendRequest[]> = of([]);
 
   constructor() {
     this.usersCollection = collection(this.firestore, 'users');
@@ -38,25 +44,25 @@ export class UserService {
       this.firestore,
       'friendRequests'
     );
+    // TODO: Remove for production
     this.users$ = collectionData(this.usersCollection, { idField: 'id' });
   }
 
   setUser(user: User): void {
-      this.userStore.setUser(user);
-      this.userStore.setFriends(user.friends);
-      this.gamesStore.setGames(user.games);
-      this.gameListsStore.setLists(user.gameLists);
+    this.userStore.setUser(user);
+    this.userStore.setFriends(user.friends);
+    this.gamesStore.setGames(user.games);
+    this.gameListsStore.setLists(user.gameLists);
+    this.getAcceptedFriendRequests();
   }
 
   getUsers(): Observable<User[]> {
     return this.users$;
   }
 
-  updateUser(update: Partial<User>): void {
-    if (this.user() && this.user()?.id) {
-      const userDoc = doc(this.firestore, 'users', this.user()!.id!);
-      updateDoc(userDoc, update);
-    }
+  updateUser(update: Partial<User>, userId: string = this.user()?.id!): void {
+    const userDoc = doc(this.firestore, 'users', userId);
+    updateDoc(userDoc, update);
   }
 
   updateFriendRequest(
@@ -71,15 +77,14 @@ export class UserService {
     updateDoc(friendRequestDoc, update);
   }
 
-  addFriend(user: User, friendRequest: FriendRequest): void {
+  addFriend(user: User, friendRequestId: string, friendId: string): void {
     const friend: Friend = {
-      id: friendRequest.id!,
-      username: friendRequest.sentByUsername,
-      friendRequest,
-    }
+      id: friendId,
+      friendRequestId: friendRequestId,
+    };
     const update: Partial<User> = {
-      friends: [...user.friends, friend]
-    }
+      friends: [...user.friends, friend],
+    };
     this.userStore.addFriend(friend);
     this.updateUser(update);
   }
@@ -101,15 +106,13 @@ export class UserService {
 
   sendFriendRequest(sentToId: string, sentToUsername: string): void {
     // TODO: Return if friend request already exists
+    // Subscribe to accepted requests on app init to add new friends
+    const friendRequest = this.createFriendRequest(
+      sentToId,
+      sentToUsername
+    ) as FriendRequest;
 
-    if (this.user()) {
-      const friendRequest = this.createFriendRequest(
-        sentToId,
-        sentToUsername
-      ) as FriendRequest;
-
-      addDoc(collection(this.firestore, 'friendRequests'), friendRequest);
-    }
+    addDoc(collection(this.firestore, 'friendRequests'), friendRequest);
   }
 
   getPendingFriendRequestsSent(): Observable<FriendRequest[]> {
@@ -142,6 +145,22 @@ export class UserService {
     }
 
     return this.friendRequestsReceived$;
+  }
+
+  getAcceptedFriendRequests(): Observable<FriendRequest[]> {
+    if (this.user()) {
+      const pendingRequestsQuery = query(
+        this.friendRequestsCollection,
+        where('sentToId', '==', this.user()!.id),
+        where('status', '==', 'accepted')
+      );
+
+      this.friendRequestsReceived$ = collectionData(pendingRequestsQuery, {
+        idField: 'id',
+      }) as Observable<FriendRequest[]>;
+    }
+
+    return this.friendRequestsAccepted$;
   }
 
   private createDefaultGameLists(): GameList[] {
