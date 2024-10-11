@@ -28,6 +28,7 @@ export class FeedComponent {
   user = inject(UserStore).user;
   pendingFriendRequestsSent: Signal<FriendRequest[] | undefined>;
   pendingFriendRequestsReceived: Signal<FriendRequest[] | undefined>;
+  acceptedFriendRequests: Signal<FriendRequest[] | undefined>;
   friend = signal<User | null>(null);
 
   constructor() {
@@ -36,6 +37,9 @@ export class FeedComponent {
     );
     this.pendingFriendRequestsReceived = toSignal(
       this.userService.getPendingFriendRequestsReceived()
+    );
+    this.acceptedFriendRequests = toSignal(
+      this.userService.getAcceptedFriendRequests()
     );
   }
 

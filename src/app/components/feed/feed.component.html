@@ -1,3 +1,6 @@
+<pre>{{ pendingFriendRequestsReceived() | json }}</pre>
+<pre>{{ pendingFriendRequestsSent() | json }}</pre>
+<pre>{{ acceptedFriendRequests() | json }}</pre>
 <app-user-select (userSet)="friend.set($event)"/>
 <button mat-button (click)="sendFriendRequest()">Send friend request</button>
 

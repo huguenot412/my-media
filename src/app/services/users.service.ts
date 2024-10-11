@@ -117,13 +117,13 @@ export class UserService {
 
   getPendingFriendRequestsSent(): Observable<FriendRequest[]> {
     if (this.user()) {
-      const pendingRequestsQuery = query(
+      const pendingRequestsSentQuery = query(
         this.friendRequestsCollection,
         where('sentById', '==', this.user()!.id),
         where('status', '==', 'pending')
       );
 
-      this.friendRequestsSent$ = collectionData(pendingRequestsQuery, {
+      this.friendRequestsSent$ = collectionData(pendingRequestsSentQuery, {
         idField: 'id',
       }) as Observable<FriendRequest[]>;
     }
@@ -133,15 +133,18 @@ export class UserService {
 
   getPendingFriendRequestsReceived(): Observable<FriendRequest[]> {
     if (this.user()) {
-      const pendingRequestsQuery = query(
+      const pendingRequestsReceivedQuery = query(
         this.friendRequestsCollection,
         where('sentToId', '==', this.user()!.id),
         where('status', '==', 'pending')
       );
 
-      this.friendRequestsReceived$ = collectionData(pendingRequestsQuery, {
-        idField: 'id',
-      }) as Observable<FriendRequest[]>;
+      this.friendRequestsReceived$ = collectionData(
+        pendingRequestsReceivedQuery,
+        {
+          idField: 'id',
+        }
+      ) as Observable<FriendRequest[]>;
     }
 
     return this.friendRequestsReceived$;
@@ -149,13 +152,13 @@ export class UserService {
 
   getAcceptedFriendRequests(): Observable<FriendRequest[]> {
     if (this.user()) {
-      const pendingRequestsQuery = query(
+      const acceptedRequestsQuery = query(
         this.friendRequestsCollection,
-        where('sentToId', '==', this.user()!.id),
+        where('sentById', '==', this.user()!.id),
         where('status', '==', 'accepted')
       );
 
-      this.friendRequestsReceived$ = collectionData(pendingRequestsQuery, {
+      this.friendRequestsReceived$ = collectionData(acceptedRequestsQuery, {
         idField: 'id',
       }) as Observable<FriendRequest[]>;
     }
