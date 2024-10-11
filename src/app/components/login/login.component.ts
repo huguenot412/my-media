@@ -2,13 +2,10 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User, UserConfig } from '../../model/users.interfaces';
 import { MatSelectModule } from '@angular/material/select';
-import { GameListsStore } from '../../store/game-lists.store';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/users.service';
-import { GamesStore } from '../../store/games.store';
 import { UserSelectComponent } from '../user-select/user-select.component';
-import { UserStore } from '../../store/user.store';
 MatSelectModule;
 
 interface LoginForm {

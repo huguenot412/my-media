@@ -9,7 +9,12 @@ import { GamesStore } from './games.store';
 import { computed, inject } from '@angular/core';
 import { GameListsStore } from './game-lists.store';
 import { Friend, User } from '../model/users.interfaces';
-import { addEntities, addEntity, setAllEntities, withEntities } from '@ngrx/signals/entities';
+import {
+  addEntities,
+  addEntity,
+  setAllEntities,
+  withEntities,
+} from '@ngrx/signals/entities';
 
 type UserState = {
   userFromApi: User | null;
@@ -22,8 +27,7 @@ const initialState: UserState = {
 export const UserStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withEntities<Friend>(),
-  withComputed(({ userFromApi, entities }) => {
+  withComputed(({ userFromApi }) => {
     const gamesStore = inject(GamesStore);
     const gameListsStore = inject(GameListsStore);
 
@@ -36,7 +40,6 @@ export const UserStore = signalStore(
             ...localUser,
             games: gamesStore.entities(),
             gameLists: gameListsStore.entities(),
-            friends: entities(),
           };
         }
 
@@ -50,11 +53,17 @@ export const UserStore = signalStore(
         userFromApi: user,
       }));
     },
-    setFriends(friends: Friend[]): void {
-      patchState(store, setAllEntities(friends))
-    },
-    addFriend(friend: Friend): void {
-      patchState(store, addEntity(friend))
+    setFriends(friendIds: string[]): void {
+      patchState(store, () => {
+        if (!store.userFromApi()) return { userFromApi: null };
+
+        return {
+          userFromApi: {
+            ...store.userFromApi()!,
+            friendIds,
+          },
+        };
+      });
     },
   }))
 );

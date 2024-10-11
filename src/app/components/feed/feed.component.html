@@ -1,6 +1,3 @@
-<pre>{{ pendingFriendRequestsReceived() | json }}</pre>
-<pre>{{ pendingFriendRequestsSent() | json }}</pre>
-<pre>{{ acceptedFriendRequests() | json }}</pre>
 <app-user-select (userSet)="friend.set($event)"/>
 <button mat-button (click)="sendFriendRequest()">Send friend request</button>
 
@@ -36,7 +33,8 @@
 
 <p>My Friends:</p>
 <ul>
-  @for (friend of user()?.friends; track friend.id) {
-    <p>{{ friend.id }}</p>
+  @for (friend of user()?.friendIds; track friend) {
+    <p>{{ friend }} </p>
+    <!-- <p>{{ friend.username + ' (' + friend.firstName + " " + friend.lastName + ')'}} </p> -->
   }
 </ul>

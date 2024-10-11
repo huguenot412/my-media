@@ -13,7 +13,7 @@ export interface User {
   username: string;
   games: UserGame[];
   gameLists: GameList[];
-  friends: Friend[];
+  friendIds: string[];
 }
 
 type FriendRequestStatus = 'pending' | 'accepted' | 'denied' | 'completed';

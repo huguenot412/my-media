@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import {
   Firestore,
   CollectionReference,
@@ -36,7 +36,7 @@ export class UserService {
   users$: Observable<any>;
   friendRequestsSent$: Observable<FriendRequest[]> = of([]);
   friendRequestsReceived$: Observable<FriendRequest[]> = of([]);
-  friendRequestsAccepted$: Observable<FriendRequest[]> = of([]);
+  friendIds$: Observable<string[]> = of([]); // List of user
 
   constructor() {
     this.usersCollection = collection(this.firestore, 'users');
@@ -50,14 +50,24 @@ export class UserService {
 
   setUser(user: User): void {
     this.userStore.setUser(user);
-    this.userStore.setFriends(user.friends);
+    this.getFriendIds().subscribe((friendIds) =>
+      this.userStore.setFriends(friendIds)
+    );
     this.gamesStore.setGames(user.games);
     this.gameListsStore.setLists(user.gameLists);
-    this.getAcceptedFriendRequests();
   }
 
   getUsers(): Observable<User[]> {
     return this.users$;
+  }
+
+  getUsersById(userIds: string[]): Observable<User[]> {
+    // Untested, not sure if works properly
+    const usersQuery = query(this.usersCollection, where('id', 'in', userIds));
+
+    return collectionData(usersQuery, {
+      idField: 'id',
+    }) as Observable<User[]>;
   }
 
   updateUser(update: Partial<User>, userId: string = this.user()?.id!): void {
@@ -77,17 +87,17 @@ export class UserService {
     updateDoc(friendRequestDoc, update);
   }
 
-  addFriend(user: User, friendRequestId: string, friendId: string): void {
-    const friend: Friend = {
-      id: friendId,
-      friendRequestId: friendRequestId,
-    };
-    const update: Partial<User> = {
-      friends: [...user.friends, friend],
-    };
-    this.userStore.addFriend(friend);
-    this.updateUser(update);
-  }
+  // addFriend(user: User, friendRequestId: string, friendId: string): void {
+  //   const friend: Friend = {
+  //     id: friendId,
+  //     friendRequestId: friendRequestId,
+  //   };
+  //   const update: Partial<User> = {
+  //     friends: [...user.friends, friend],
+  //   };
+  //   this.userStore.addFriend(friend);
+  //   this.updateUser(update);
+  // }
 
   createNewUser(config: UserConfig): void {
     const { firstName, lastName, username } = config;
@@ -98,7 +108,7 @@ export class UserService {
       username,
       games: [],
       gameLists: this.createDefaultGameLists(),
-      friends: [],
+      friendIds: [],
     };
 
     addDoc(collection(this.firestore, 'users'), user);
@@ -150,20 +160,43 @@ export class UserService {
     return this.friendRequestsReceived$;
   }
 
-  getAcceptedFriendRequests(): Observable<FriendRequest[]> {
+  getFriendIds(): Observable<string[]> {
     if (this.user()) {
-      const acceptedRequestsQuery = query(
+      const acceptedSentRequestsQuery = query(
         this.friendRequestsCollection,
-        where('sentById', '==', this.user()!.id),
-        where('status', '==', 'accepted')
+        where('status', '==', 'accepted'),
+        where('sentById', '==', this.user()!.id)
       );
 
-      this.friendRequestsReceived$ = collectionData(acceptedRequestsQuery, {
+      const acceptedReceivedRequestsQuery = query(
+        this.friendRequestsCollection,
+        where('status', '==', 'accepted'),
+        where('sentToId', '==', this.user()!.id)
+      );
+
+      const acceptedSentRequests$ = collectionData(acceptedSentRequestsQuery, {
         idField: 'id',
       }) as Observable<FriendRequest[]>;
+
+      const acceptedReceivedRequests$ = collectionData(
+        acceptedReceivedRequestsQuery,
+        {
+          idField: 'id',
+        }
+      ) as Observable<FriendRequest[]>;
+
+      this.friendIds$ = combineLatest([
+        acceptedSentRequests$,
+        acceptedReceivedRequests$,
+      ]).pipe(
+        map(([sentBy, sentTo]) => [
+          ...sentBy.map((request) => request.sentToId),
+          ...sentTo.map((request) => request.sentById),
+        ])
+      );
     }
 
-    return this.friendRequestsAccepted$;
+    return this.friendIds$;
   }
 
   private createDefaultGameLists(): GameList[] {

@@ -1,4 +1,4 @@
-import { Component, inject, signal, Signal } from '@angular/core';
+import { Component, inject, OnInit, signal, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -8,6 +8,7 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 import { FriendRequest, User } from '../../model/users.interfaces';
 import { UserSelectComponent } from '../user-select/user-select.component';
 import { UserStore } from '../../store/user.store';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-feed',
@@ -28,7 +29,7 @@ export class FeedComponent {
   user = inject(UserStore).user;
   pendingFriendRequestsSent: Signal<FriendRequest[] | undefined>;
   pendingFriendRequestsReceived: Signal<FriendRequest[] | undefined>;
-  acceptedFriendRequests: Signal<FriendRequest[] | undefined>;
+  friends: Signal<User[] | undefined>;
   friend = signal<User | null>(null);
 
   constructor() {
@@ -38,9 +39,14 @@ export class FeedComponent {
     this.pendingFriendRequestsReceived = toSignal(
       this.userService.getPendingFriendRequestsReceived()
     );
-    this.acceptedFriendRequests = toSignal(
-      this.userService.getAcceptedFriendRequests()
-    );
+
+    if (this.user()) {
+      this.friends = toSignal(
+        this.userService.getUsersById(this.user()!.friendIds)
+      );
+    } else {
+      this.friends = signal([]);
+    }
   }
 
   sendFriendRequest(): void {
@@ -60,11 +66,6 @@ export class FeedComponent {
     };
 
     this.userService.updateFriendRequest(friendRequest.id!, update);
-    this.userService.addFriend(
-      this.user()!,
-      friendRequest.id!,
-      friendRequest.sentById
-    );
   }
 
   denyFriendRequest(friendRequestId: string): void {
