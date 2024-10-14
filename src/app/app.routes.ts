@@ -31,7 +31,7 @@ export const routes: Routes = [
     component: ShowListsComponent,
   },
   {
-    path: 'feed',
+    path: 'friends',
     component: FeedComponent,
   },
   {

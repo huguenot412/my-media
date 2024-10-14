@@ -9,6 +9,7 @@ import { FriendRequest, User } from '../../model/users.interfaces';
 import { UserSelectComponent } from '../user-select/user-select.component';
 import { UserStore } from '../../store/user.store';
 import { map } from 'rxjs';
+import { faThemeisle } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-feed',
@@ -26,10 +27,11 @@ import { map } from 'rxjs';
 })
 export class FeedComponent {
   userService = inject(UserService);
+  userStore = inject(UserStore);
   user = inject(UserStore).user;
   pendingFriendRequestsSent: Signal<FriendRequest[] | undefined>;
   pendingFriendRequestsReceived: Signal<FriendRequest[] | undefined>;
-  friends: Signal<User[] | undefined>;
+  friends = this.userStore.friendsEntities;
   friend = signal<User | null>(null);
 
   constructor() {
@@ -39,14 +41,6 @@ export class FeedComponent {
     this.pendingFriendRequestsReceived = toSignal(
       this.userService.getPendingFriendRequestsReceived()
     );
-
-    if (this.user()) {
-      this.friends = toSignal(
-        this.userService.getUsersById(this.user()!.friendIds)
-      );
-    } else {
-      this.friends = signal([]);
-    }
   }
 
   sendFriendRequest(): void {
@@ -66,6 +60,7 @@ export class FeedComponent {
     };
 
     this.userService.updateFriendRequest(friendRequest.id!, update);
+    this.userService.getFriendIds();
   }
 
   denyFriendRequest(friendRequestId: string): void {

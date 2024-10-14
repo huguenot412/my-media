@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 import {
   Firestore,
   CollectionReference,
@@ -14,6 +14,7 @@ import {
 import {
   Friend,
   FriendRequest,
+  ProtoUser,
   User,
   UserConfig,
 } from '../model/users.interfaces';
@@ -34,6 +35,7 @@ export class UserService {
   user = this.userStore.user;
   firestore: Firestore = inject(Firestore);
   users$: Observable<any>;
+  friends$: Observable<User[]> = of([]);
   friendRequestsSent$: Observable<FriendRequest[]> = of([]);
   friendRequestsReceived$: Observable<FriendRequest[]> = of([]);
   friendIds$: Observable<string[]> = of([]); // List of user
@@ -50,9 +52,13 @@ export class UserService {
 
   setUser(user: User): void {
     this.userStore.setUser(user);
-    this.getFriendIds().subscribe((friendIds) =>
-      this.userStore.setFriends(friendIds)
-    );
+    this.getFriendIds()
+      .pipe(
+        tap((ids) => console.log('friend ids: ', ids)),
+        switchMap((friendIds) => this.getFriends(friendIds)),
+        tap((friends) => console.log('friends :', friends))
+      )
+      .subscribe((friends) => this.userStore.setFriends(friends));
     this.gamesStore.setGames(user.games);
     this.gameListsStore.setLists(user.gameLists);
   }
@@ -87,28 +93,15 @@ export class UserService {
     updateDoc(friendRequestDoc, update);
   }
 
-  // addFriend(user: User, friendRequestId: string, friendId: string): void {
-  //   const friend: Friend = {
-  //     id: friendId,
-  //     friendRequestId: friendRequestId,
-  //   };
-  //   const update: Partial<User> = {
-  //     friends: [...user.friends, friend],
-  //   };
-  //   this.userStore.addFriend(friend);
-  //   this.updateUser(update);
-  // }
-
   createNewUser(config: UserConfig): void {
     const { firstName, lastName, username } = config;
 
-    const user: User = {
+    const user: ProtoUser = {
       firstName,
       lastName,
       username,
       games: [],
       gameLists: this.createDefaultGameLists(),
-      friendIds: [],
     };
 
     addDoc(collection(this.firestore, 'users'), user);
@@ -116,7 +109,6 @@ export class UserService {
 
   sendFriendRequest(sentToId: string, sentToUsername: string): void {
     // TODO: Return if friend request already exists
-    // Subscribe to accepted requests on app init to add new friends
     const friendRequest = this.createFriendRequest(
       sentToId,
       sentToUsername
@@ -158,6 +150,21 @@ export class UserService {
     }
 
     return this.friendRequestsReceived$;
+  }
+
+  getFriends(friendIds: string[]): Observable<User[]> {
+    if (this.user()) {
+      const friendsQuery = query(
+        this.usersCollection,
+        where('__name__', 'in', friendIds)
+      );
+
+      this.friends$ = collectionData(friendsQuery, {
+        idField: 'id',
+      }) as Observable<User[]>;
+    }
+
+    return this.friends$;
   }
 
   getFriendIds(): Observable<string[]> {

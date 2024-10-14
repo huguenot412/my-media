@@ -6,14 +6,16 @@ export interface UserConfig {
   username: string;
 }
 
-export interface User {
-  id?: string;
+export interface ProtoUser {
   firstName: string;
   lastName: string;
   username: string;
   games: UserGame[];
   gameLists: GameList[];
-  friendIds: string[];
+}
+
+export interface User extends ProtoUser {
+  id: string;
 }
 
 type FriendRequestStatus = 'pending' | 'accepted' | 'denied' | 'completed';

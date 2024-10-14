@@ -2,9 +2,9 @@
   <mat-label>
     {{ mode() === 'add' ? 'Add game to list' : 'Move game to list' }}
   </mat-label>
-  <mat-select>
+  <mat-select [(ngModel)]="selectedList" (selectionChange)="handleListSelect()">
     @for (list of listsToShow(); track list.id) {
-      <mat-option [value]="list" (click)="handleListSelect(list.id)">{{ list.name }}</mat-option>
+      <mat-option [value]="list.id">{{ list.name }}</mat-option>
     }
   </mat-select>
 </mat-form-field>

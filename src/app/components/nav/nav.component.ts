@@ -41,8 +41,8 @@ export class NavComponent {
       path: 'show-lists',
     },
     {
-      displayName: 'Friend activity',
-      path: 'feed',
+      displayName: 'Friends',
+      path: 'friends',
     },
     {
       displayName: 'Recommendations',
