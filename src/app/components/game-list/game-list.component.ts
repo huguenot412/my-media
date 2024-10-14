@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../model/users.interfaces';
 import { UserService } from '../../services/users.service';
 import { UserStore } from '../../store/user.store';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-game-list',
@@ -34,28 +35,34 @@ import { UserStore } from '../../store/user.store';
     ScrollingModule,
     MatButtonToggleModule,
     FormsModule,
+    JsonPipe,
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.scss',
 })
 export class GameListComponent {
   list = input.required<GameList>();
+  listOwner = input.required<User>();
+  editable = input(true);
   gameListsStore = inject(GameListsStore);
   gamesStore = inject(GamesStore);
   userStore = inject(UserStore);
   userService = inject(UserService);
   rankedView = input.required<boolean>();
   detailView = input<boolean>(false);
-  scrollView = signal(true);
+  scrollView = input(true);
   faTrash = faTrash;
   faGripLinesVertical = faGripLinesVertical;
   games = computed(() => {
     return this.list().games.map(
-      (gameId) => this.gamesStore.entityMap()[gameId]
+      (gameId) =>
+        this.listOwner().games.find((game) => game.id === gameId) as UserGame
     );
   });
 
   setRankedView(ranked: boolean): void {
+    if (!this.editable()) return;
+
     this.gameListsStore.setRanked(this.list().id, ranked);
 
     const update: Partial<User> = {
@@ -66,6 +73,8 @@ export class GameListComponent {
   }
 
   deleteList(listId: string): void {
+    if (!this.editable()) return;
+
     this.gameListsStore.deleteList(listId);
 
     const update: Partial<User> = {
@@ -76,6 +85,8 @@ export class GameListComponent {
   }
 
   onDrop(event: CdkDragDrop<UserGame[]>): void {
+    if (!this.editable()) return;
+
     moveItemInArray(this.list().games, event.previousIndex, event.currentIndex);
     this.gameListsStore.updateListGames(this.list().id, this.list().games);
 

@@ -8,8 +8,9 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 import { FriendRequest, User } from '../../model/users.interfaces';
 import { UserSelectComponent } from '../user-select/user-select.component';
 import { UserStore } from '../../store/user.store';
-import { map } from 'rxjs';
-import { faThemeisle } from '@fortawesome/free-brands-svg-icons';
+import { GameListsComponent } from '../game-lists/game-lists.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-feed',
@@ -21,6 +22,9 @@ import { faThemeisle } from '@fortawesome/free-brands-svg-icons';
     AsyncPipe,
     JsonPipe,
     UserSelectComponent,
+    GameListsComponent,
+    MatTabsModule,
+    MatCardModule,
   ],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss',

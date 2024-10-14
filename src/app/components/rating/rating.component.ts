@@ -21,6 +21,7 @@ export class RatingComponent implements OnInit {
   rating = input.required<Rating>();
   gameId = input.required<number>();
   gamesStore = inject(GamesStore);
+  editable = input(true);
   stars = signal<boolean[]>([]);
   faStar = faStar;
 
@@ -31,6 +32,8 @@ export class RatingComponent implements OnInit {
   }
 
   updateGameRating(id: number, score: number): void {
+    if (!this.editable()) return;
+
     this.gamesStore.updateGameRating(id, score);
 
     const update: Partial<User> = {

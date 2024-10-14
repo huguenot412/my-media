@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { UserSelectComponent } from '../user-select/user-select.component';
@@ -10,7 +10,7 @@ import { UserService } from '../../services/users.service';
 
 interface NavLink {
   displayName: string;
-  path: string;
+  path: string[];
 }
 
 @Component({
@@ -23,32 +23,35 @@ interface NavLink {
 export class NavComponent {
   gameListsStore = inject(GameListsStore);
   userService = inject(UserService);
-  links = signal<NavLink[]>([
-    {
-      displayName: 'Login',
-      path: 'login',
-    },
-    {
-      displayName: 'Games',
-      path: 'game-lists',
-    },
-    {
-      displayName: 'Books',
-      path: 'book-lists',
-    },
-    {
-      displayName: 'Film/TV',
-      path: 'show-lists',
-    },
-    {
-      displayName: 'Friends',
-      path: 'friends',
-    },
-    {
-      displayName: 'Recommendations',
-      path: 'recommendations',
-    },
-  ]);
+  userStore = inject(UserStore);
+  links = computed<NavLink[]>(() => {
+    return [
+      {
+        displayName: 'Login',
+        path: ['login'],
+      },
+      {
+        displayName: 'Games',
+        path: ['game-lists', this.userStore.user()?.id || ''],
+      },
+      {
+        displayName: 'Books',
+        path: ['book-lists'],
+      },
+      {
+        displayName: 'Film/TV',
+        path: ['show-lists'],
+      },
+      {
+        displayName: 'Friends',
+        path: ['friends'],
+      },
+      {
+        displayName: 'Recommendations',
+        path: ['recommendations'],
+      },
+    ];
+  });
 
   setUser(user: User): void {
     this.userService.setUser(user);

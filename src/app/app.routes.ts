@@ -19,15 +19,15 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'game-lists',
+    path: 'game-lists/:userId',
     component: GameListsComponent,
   },
   {
-    path: 'book-lists',
+    path: 'book-lists/:userId',
     component: BookListsComponent,
   },
   {
-    path: 'show-lists',
+    path: 'show-lists/:userId',
     component: ShowListsComponent,
   },
   {
@@ -44,6 +44,6 @@ export const routes: Routes = [
   },
   {
     path: '*',
-    redirectTo: 'game-lists',
+    redirectTo: 'login',
   },
 ];

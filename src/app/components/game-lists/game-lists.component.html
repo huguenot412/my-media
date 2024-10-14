@@ -1,20 +1,24 @@
-<app-search class="search"/>
+
+@if (editable()) {
+  <app-search class="search"/>
+}
 
 <div class="lists-container">
-  <!-- <pre>{{ gameListsStore.user() | json}}</pre> -->
   <div class="actions">
-    <form #newListForm="ngForm" (ngSubmit)="addList(this.newListName)">
-      <mat-form-field >
-        <mat-label>Create new list</mat-label>
-        <input matInput type="text" [(ngModel)]="newListName" name="newListName">
-        @if (newListName) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="newListName=''">
-            <mat-icon>close</mat-icon>
-          </button>
-        }
-      </mat-form-field>
-      <button mat-button type="submit" [disabled]="!newListName">Create new list</button>
-    </form>
+    @if (editable()) {
+      <form #newListForm="ngForm" (ngSubmit)="addList(this.newListName)">
+        <mat-form-field >
+          <mat-label>Create new list</mat-label>
+          <input matInput type="text" [(ngModel)]="newListName" name="newListName">
+          @if (newListName) {
+            <button matSuffix mat-icon-button aria-label="Clear" (click)="newListName=''">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+        <button mat-button type="submit" [disabled]="!newListName">Create new list</button>
+      </form>
+    }
     <mat-button-toggle-group>
       <mat-button-toggle (click)="detailView.set(false)" [checked]="detailView() === false">
         Simple
@@ -23,11 +27,25 @@
         Detailed
       </mat-button-toggle>
     </mat-button-toggle-group>
+    <mat-button-toggle-group>
+      <mat-button-toggle value="Scroll" (click)="scrollView.set(true)" [checked]="scrollView() === true">Scroll</mat-button-toggle>
+      <mat-button-toggle value="Full" (click)="scrollView.set(false)" [checked]="scrollView() === false">Full</mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
+
 
   <cdk-virtual-scroll-viewport appendOnly itemSize="10" class="lists-scroll-viewport">
     <div class="lists">
-      <app-game-list *cdkVirtualFor="let list of gameListsStore.entities(); trackBy: listTrackBy" class="list" [list]="list" [rankedView]="list.ranked" [detailView]="detailView()"/>
+      <app-game-list
+        *cdkVirtualFor="let list of listsToDisplay(); trackBy: listTrackBy"
+        class="list"
+        [list]="list"
+        [rankedView]="list.ranked"
+        [detailView]="detailView()"
+        [listOwner]="listOwner()"
+        [editable]="editable()"
+        [scrollView]="scrollView()"/>
+
     </div>
   </cdk-virtual-scroll-viewport>
 </div>

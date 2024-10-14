@@ -1,4 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  Input,
+  input,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameListsStore } from '../../store/game-lists.store';
 import { GameList } from '../../model/games.interfaces';
@@ -38,13 +45,33 @@ import { User } from '../../model/users.interfaces';
   styleUrl: './game-lists.component.scss',
 })
 export class GameListsComponent {
+  userId = input<string | undefined>(undefined);
+  friendId = input('');
+  editable = computed(() => (this.friendId() ? false : true));
   gameListsStore = inject(GameListsStore);
   userService = inject(UserService);
   userStore = inject(UserStore);
   newListName = '';
   detailView = signal(false);
+  scrollView = signal(true);
+  listsToDisplay = computed(() => {
+    if (this.friendId()) {
+      return this.userStore.friendsEntityMap()[this.friendId()].gameLists;
+    } else if (this.userId()) {
+      return this.gameListsStore.entities();
+    } else return [];
+  });
+  listOwner = computed(() => {
+    if (this.friendId()) {
+      return this.userStore.friendsEntityMap()[this.friendId()];
+    } else {
+      return this.userStore.user()!;
+    }
+  });
 
   addList(name: string): void {
+    if (!this.editable()) return;
+
     const list: GameList = {
       name,
       id: name.toLowerCase(),

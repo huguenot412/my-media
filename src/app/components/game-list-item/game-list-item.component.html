@@ -1,7 +1,7 @@
 <mat-card class="list-item">
   <mat-card-content>
     <div class="game">
-      <div class="game-name" cdkDragHandle>
+      <div class="game-name" cdkDragHandle [cdkDragHandleDisabled]="!editable()">
         @if (rankedView()) {
             <p class="rank">{{ rank() }}</p>
         }
@@ -12,19 +12,22 @@
 
       </div>
       <fa-icon class="info-icon" [icon]="faCircleInfo" [routerLink]="['../game', game().id]"/>
-      <fa-icon
-        class="trash"
-        [icon]="faTrash"
-        (click)="deleteGameFromList()"
-      />
+
+      @if (editable()) {
+        <fa-icon
+          class="trash"
+          [icon]="faTrash"
+          (click)="deleteGameFromList()"
+        />
+      }
     </div>
 
 
     @if (detailView()) {
       <div class="detail-view">
-        <app-rating [rating]="game().rating" [gameId]="game().id"/>
+        <app-rating [rating]="game().rating" [gameId]="game().id" [editable]="editable()"/>
 
-        @if (editNote()) {
+        @if (editNote() && editable()) {
           <div class="edit-note">
             <mat-form-field>
               <mat-label>Add a note</mat-label>
@@ -36,17 +39,22 @@
           <div class="note">
             @if (game().note) {
               <p>{{ game().note }}</p>
-            } @else {
+            } @else if (editable()){
               <p class="note-prompt">Add a note</p>
             }
-            <fa-icon
-              [icon]="faPenToSquare"
-              (click)=" toggleEditNote()"
-            />
+
+            @if (editable()) {
+              <fa-icon
+                [icon]="faPenToSquare"
+                (click)=" toggleEditNote()"
+              />
+            }
           </div>
         }
 
-        <app-list-select [game]="game()" [showModeToggle]="true" [listId]="listId()"/>
+        @if (editable()) {
+          <app-list-select [game]="game()" [showModeToggle]="true" [listId]="listId()"/>
+        }
       </div>
     }
   </mat-card-content>

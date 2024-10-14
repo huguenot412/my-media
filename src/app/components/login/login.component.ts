@@ -6,6 +6,7 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/users.service';
 import { UserSelectComponent } from '../user-select/user-select.component';
+import { UserStore } from '../../store/user.store';
 MatSelectModule;
 
 interface LoginForm {
@@ -44,19 +45,20 @@ export class LoginComponent {
     newPassword: '',
   };
   errorMessage = signal('');
+  userId = inject(UserStore).user()?.id;
   users = signal<User[]>([]);
 
   setUser(user: User) {
     this.userService.setUser(user);
-    this.navigateToLists();
+    this.navigateToLists(user.id);
   }
 
   setErrorMessage(message: string): void {
     this.errorMessage.set(message);
   }
 
-  navigateToLists(): void {
-    this.router.navigate(['/game-lists']);
+  navigateToLists(userId: string): void {
+    this.router.navigate(['/game-lists', userId]);
   }
 
   resetLoginForm(): void {
@@ -72,7 +74,7 @@ export class LoginComponent {
     );
 
     if (user) {
-      this.navigateToLists();
+      this.navigateToLists(user.id);
     }
   }
 
