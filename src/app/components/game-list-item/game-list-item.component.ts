@@ -50,6 +50,7 @@ import { GamesService } from '../../services/games.service';
   styleUrl: './game-list-item.component.scss',
 })
 export class GameListItemComponent implements OnInit {
+  editable = input(true);
   game = input.required<UserGame>();
   gamesService = inject(GamesService);
   listId = input.required<string>();
@@ -67,15 +68,21 @@ export class GameListItemComponent implements OnInit {
   }
 
   deleteGameFromList(): void {
+    if (!this.editable()) return;
+
     this.gamesService.deleteGameFromList(this.game().id, this.listId());
   }
 
   updateGameNote(): void {
-    this.gamesService.updateGameNote(this.game().id, this.listId());
+    if (!this.editable()) return;
+
+    this.gamesService.updateGameNote(this.game().id, this.note);
     this.toggleEditNote();
   }
 
   toggleEditNote(): void {
+    if (!this.editable()) return;
+
     this.editNote.set(!this.editNote());
   }
 }

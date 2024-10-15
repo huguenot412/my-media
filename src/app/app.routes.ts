@@ -7,6 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RecommendationsComponent } from './components/recommendations/recommendations.component';
 import { BookListsComponent } from './components/books/book-lists/book-lists.component';
 import { ShowListsComponent } from './components/shows/show-lists/show-lists.component';
+import { MyListsComponent } from './components/my-lists/my-lists.component';
 
 export const routes: Routes = [
   {
@@ -19,19 +20,11 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'game-lists',
-    component: GameListsComponent,
+    path: 'my-lists/:userId',
+    component: MyListsComponent,
   },
   {
-    path: 'book-lists',
-    component: BookListsComponent,
-  },
-  {
-    path: 'show-lists',
-    component: ShowListsComponent,
-  },
-  {
-    path: 'feed',
+    path: 'friends/:userId',
     component: FeedComponent,
   },
   {
@@ -39,11 +32,7 @@ export const routes: Routes = [
     component: GameDetailsComponent,
   },
   {
-    path: 'recommendations',
-    component: RecommendationsComponent,
-  },
-  {
     path: '*',
-    redirectTo: 'game-lists',
+    redirectTo: 'login',
   },
 ];

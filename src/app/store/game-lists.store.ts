@@ -69,14 +69,16 @@ export const GameListsStore = signalStore(
         );
       },
       removeGameFromList(listId: string, gameId: number): void {
+        const games = [...store.entityMap()[listId].games];
+        const gameIndex = games.findIndex((game) => game === gameId);
+        games.splice(gameIndex, 1);
+
         patchState(
           store,
           updateEntity({
             id: listId,
             changes: {
-              games: store
-                .entityMap()
-                [listId].games.filter((game) => game !== gameId),
+              games,
             },
           })
         );

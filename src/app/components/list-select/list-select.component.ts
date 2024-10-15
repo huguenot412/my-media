@@ -5,6 +5,7 @@ import { Game, GameList } from '../../model/games.interfaces';
 import { GamesService } from '../../services/games.service';
 import { GameListsStore } from '../../store/game-lists.store';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
 
 type ListSelectMode = 'add' | 'move';
 type ListSelectOptions = 'all' | 'user' | 'default';
@@ -12,7 +13,12 @@ type ListSelectOptions = 'all' | 'user' | 'default';
 @Component({
   selector: 'app-list-select',
   standalone: true,
-  imports: [MatFormFieldModule, MatSelectModule, MatButtonToggleModule],
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonToggleModule,
+    FormsModule,
+  ],
   templateUrl: './list-select.component.html',
   styleUrl: './list-select.component.scss',
 })
@@ -24,6 +30,7 @@ export class ListSelectComponent {
   mode = signal<ListSelectMode>('add');
   showModeToggle = input<boolean>(false);
   showLists = input<ListSelectOptions>('all');
+  selectedList = '';
   listsToShow = computed<GameList[]>(() => {
     if (this.showLists() === 'all') {
       return this.gameListsStore
@@ -40,22 +47,22 @@ export class ListSelectComponent {
     }
   });
 
-  addGame(listId: string): void {
-    this.gamesService.addGame(this.game(), listId);
+  addGame(): void {
+    this.gamesService.addGame(this.game(), this.selectedList);
   }
 
-  moveGame(moveFromListId: string, moveToListId: string): void {
-    this.addGame(moveToListId);
-    this.gamesService.deleteGameFromList(this.game().id, moveFromListId);
+  moveGame(): void {
+    this.gamesService.deleteGameFromList(this.game().id, this.listId()!);
+    this.addGame();
   }
 
-  handleListSelect(moveToListId: string): void {
-    if (this.mode() === 'add') {
-      this.addGame(moveToListId);
-    }
-
-    if (this.mode() === 'move' && this.listId()) {
-      this.moveGame(this.listId()!, moveToListId);
+  handleListSelect(): void {
+    if (this.listId() && this.selectedList) {
+      if (this.mode() === 'add') {
+        this.addGame();
+      } else {
+        this.moveGame();
+      }
     }
   }
 }

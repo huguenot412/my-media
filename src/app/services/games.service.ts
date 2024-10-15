@@ -44,6 +44,11 @@ export class GamesService {
   }
 
   addGame(game: Game, listId: string): void {
+    const list = this.gameListsStore.entityMap()[listId].games;
+    const gameAlreadyInList = list.find((g) => g === game.id);
+
+    if (gameAlreadyInList) return;
+
     this.gamesStore.addGame(game);
     this.gameListsStore.addGameToList(listId, game.id);
 
@@ -56,18 +61,21 @@ export class GamesService {
   }
 
   deleteGameFromList(gameId: number, listId: string): void {
-    this.gameListsStore.removeGameFromList(listId, gameId);
+    // Timout required to prevent mat-select from bugging due to host element being deleted from list
+    setTimeout(() => {
+      this.gameListsStore.removeGameFromList(listId, gameId);
 
-    const update: Partial<User> = {
-      gameLists: this.gameListsStore.entities(),
-      games: this.gamesStore.entities(),
-    };
+      const update: Partial<User> = {
+        gameLists: this.gameListsStore.entities(),
+        games: this.gamesStore.entities(),
+      };
 
-    this.userService.updateUser(update);
+      this.userService.updateUser(update);
+    }, 100);
   }
 
-  updateGameNote(gameId: number, listId: string): void {
-    this.gamesStore.updateGameNote(gameId, listId);
+  updateGameNote(gameId: number, note: string): void {
+    this.gamesStore.updateGameNote(gameId, note);
 
     const update: Partial<User> = {
       games: this.gamesStore.entities(),

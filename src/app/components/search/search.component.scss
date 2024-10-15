@@ -36,6 +36,7 @@
 
 .game-title {
   padding: 0 10px;
+  text-align: center;
 }
 
 .search {
@@ -51,6 +52,8 @@
   gap: 5px;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-around;
+  width: 100%;
 }
 
 .list-select {

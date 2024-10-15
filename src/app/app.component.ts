@@ -1,15 +1,12 @@
-import { Component } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { OnInit } from '@angular/core';
-import { inject } from '@angular/core';
-import { GameListsStore } from './store/game-lists.store';
-import { GameList } from './model/games.interfaces';
+import { Component, inject, Signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { NavComponent } from './components/nav/nav.component';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { FriendRequest } from './model/users.interfaces';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { UserService } from './services/users.service';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -20,28 +17,10 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
     MatListModule,
     NavComponent,
     JsonPipe,
-    AsyncPipe,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
-  router = inject(Router);
-  gameListsStore = inject(GameListsStore);
+export class AppComponent {
   title = 'my-media';
-  firestore = inject(Firestore);
-
-  users$!: Observable<any[]>;
-
-  constructor() {
-    const aCollection = collection(this.firestore, 'users');
-    this.users$ = collectionData(aCollection);
-  }
-
-  ngOnInit(): void {
-    // this.gameListsStore.addGameLists(this.defaultGameLists);
-    // if (!localStorage.getItem('activeUser')) {
-    //   this.router.navigate(['/login']);
-    // }
-  }
 }

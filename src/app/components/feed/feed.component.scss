@@ -1,0 +1,14 @@
+.tab-content {
+  padding: 20px;
+}
+
+.pending-requests {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+
+  mat-card {
+    min-width: 360px;
+  }
+}

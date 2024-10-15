@@ -1,1 +1,70 @@
-<p>feed works!</p>
+<mat-tab-group dynamicHeight mat-stretch-tabs="false" mat-align-tabs="start">
+  <mat-tab label="Friend Lists">
+    <div class="tab-content mat-elevation-z4">
+      <ul>
+        @for (friend of friends(); track friend.id) {
+          <p>{{ friend.username + ' (' + friend.firstName + " " + friend.lastName + ')'}} </p>
+          <app-game-lists [friendId]="friend.id" />
+        }
+      </ul>
+    </div>
+  </mat-tab>
+  <mat-tab label="Recommendations">
+    <app-recommendations />
+  </mat-tab>
+  <mat-tab label="Friend Requests">
+    <div class="tab-content mat-elevation-z4">
+      <app-user-select (userSet)="friend.set($event)"/>
+        <button mat-button (click)="sendFriendRequest()">Send friend request</button>
+
+        <p>Pending Requests</p>
+
+        <div class="pending-requests">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                <p>Sent</p>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              @if (pendingFriendRequestsSent()?.length) {
+                <ul>
+                  @for (friendRequest of pendingFriendRequestsSent(); track friendRequest.id) {
+                    <li>
+                      <p>{{ friendRequest.sentToUsername }}</p>
+                    </li>
+                  }
+                </ul>
+              } @else {
+                <p>No requests sent.</p>
+              }
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                <p>Received</p>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              @if (pendingFriendRequestsReceived()?.length) {
+                <ul>
+                  @for (friendRequest of pendingFriendRequestsReceived(); track friendRequest.id) {
+                    <li>
+                      <p>{{ friendRequest.sentByUsername }}</p>
+                      <button mat-button (click)="acceptFriendRequest(friendRequest)">Accept</button>
+                      <button mat-button (click)="denyFriendRequest(friendRequest.id!)">Deny</button>
+                    </li>
+                  }
+                </ul>
+              } @else {
+                <p>No requests received.</p>
+              }
+            </mat-card-content>
+          </mat-card>
+        </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+

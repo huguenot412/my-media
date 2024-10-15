@@ -2,11 +2,9 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User, UserConfig } from '../../model/users.interfaces';
 import { MatSelectModule } from '@angular/material/select';
-import { GameListsStore } from '../../store/game-lists.store';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/users.service';
-import { GamesStore } from '../../store/games.store';
 import { UserSelectComponent } from '../user-select/user-select.component';
 import { UserStore } from '../../store/user.store';
 MatSelectModule;
@@ -36,12 +34,8 @@ type LoginFormKey = keyof LoginForm;
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  gameListsStore = inject(GameListsStore);
-  gamesStore = inject(GamesStore);
-  userStore = inject(UserStore);
   userService = inject(UserService);
   router = inject(Router);
-
   loginForm = {
     username: '',
     password: '',
@@ -51,21 +45,20 @@ export class LoginComponent {
     newPassword: '',
   };
   errorMessage = signal('');
+  userId = inject(UserStore).user()?.id;
   users = signal<User[]>([]);
 
   setUser(user: User) {
-    this.userStore.setUser(user);
-    this.gamesStore.setGames(user.games);
-    this.gameListsStore.setLists(user.gameLists);
-    this.navigateToLists();
+    this.userService.setUser(user);
+    this.navigateToLists(user.id);
   }
 
   setErrorMessage(message: string): void {
     this.errorMessage.set(message);
   }
 
-  navigateToLists(): void {
-    this.router.navigate(['/game-lists']);
+  navigateToLists(userId: string): void {
+    this.router.navigate(['/my-lists', userId]);
   }
 
   resetLoginForm(): void {
@@ -81,7 +74,7 @@ export class LoginComponent {
     );
 
     if (user) {
-      this.navigateToLists();
+      this.navigateToLists(user.id);
     }
   }
 
