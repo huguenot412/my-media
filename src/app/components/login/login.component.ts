@@ -58,7 +58,7 @@ export class LoginComponent {
   }
 
   navigateToLists(userId: string): void {
-    this.router.navigate(['/game-lists', userId]);
+    this.router.navigate(['/my-lists', userId]);
   }
 
   resetLoginForm(): void {

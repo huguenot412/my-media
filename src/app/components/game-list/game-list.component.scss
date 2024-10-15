@@ -1,5 +1,6 @@
 .trash {
   color: #333;
+  visibility: hidden;
 
   &:hover {
     color: #ff4747;
@@ -17,6 +18,12 @@
   border: 1px solid #efefef;
   display: flex;
   flex-direction: column;
+
+  &:hover {
+    .trash {
+      visibility: visible;
+    }
+  }
 }
 
 .drag-handle {
@@ -68,4 +75,10 @@ mat-card-content {
 
 .cdk-drop-list {
   padding: 0;
+}
+
+.list-header {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
 }

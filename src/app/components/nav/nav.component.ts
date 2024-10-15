@@ -27,28 +27,16 @@ export class NavComponent {
   links = computed<NavLink[]>(() => {
     return [
       {
-        displayName: 'Login',
-        path: ['login'],
-      },
-      {
-        displayName: 'Games',
-        path: ['game-lists', this.userStore.user()?.id || ''],
-      },
-      {
-        displayName: 'Books',
-        path: ['book-lists'],
-      },
-      {
-        displayName: 'Film/TV',
-        path: ['show-lists'],
+        displayName: 'My Lists',
+        path: ['my-lists', this.userStore.user()?.id || ''],
       },
       {
         displayName: 'Friends',
-        path: ['friends'],
+        path: ['friends', this.userStore.user()?.id || ''],
       },
       {
-        displayName: 'Recommendations',
-        path: ['recommendations'],
+        displayName: 'Login',
+        path: ['login'],
       },
     ];
   });

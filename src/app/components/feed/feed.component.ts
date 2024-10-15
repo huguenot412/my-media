@@ -11,6 +11,7 @@ import { UserStore } from '../../store/user.store';
 import { GameListsComponent } from '../game-lists/game-lists.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
+import { RecommendationsComponent } from '../recommendations/recommendations.component';
 
 @Component({
   selector: 'app-feed',
@@ -25,6 +26,7 @@ import { MatCardModule } from '@angular/material/card';
     GameListsComponent,
     MatTabsModule,
     MatCardModule,
+    RecommendationsComponent,
   ],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss',

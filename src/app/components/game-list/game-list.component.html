@@ -1,9 +1,12 @@
 
 <mat-card class="list">
-  <mat-card-header>
+  <mat-card-header class="list-header">
     <mat-card-title>
       <p>{{ list().name }}</p>
     </mat-card-title>
+    @if (list().type == 'user') {
+      <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list().id)" />
+    }
   </mat-card-header>
   <mat-card-content>
     @if(list().games.length) {
@@ -46,17 +49,14 @@
       <p>No games currently in list</p>
     }
   </mat-card-content>
-  @if (editable()) {
-  <mat-card-actions class="actions">
-    <div class="toggles">
-        <mat-button-toggle-group>
-          <mat-button-toggle value="unranked" (click)="setRankedView(false)" [checked]="rankedView() === false">Unranked</mat-button-toggle>
-          <mat-button-toggle value="ranked" (click)="setRankedView(true)" [checked]="rankedView() === true">Ranked</mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-      @if (list().type == 'user') {
-        <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list().id)" />
-      }
+  @if (editable() && detailView()) {
+    <mat-card-actions class="actions">
+      <div class="toggles">
+          <mat-button-toggle-group>
+            <mat-button-toggle value="unranked" (click)="setRankedView(false)" [checked]="rankedView() === false">Unranked</mat-button-toggle>
+            <mat-button-toggle value="ranked" (click)="setRankedView(true)" [checked]="rankedView() === true">Ranked</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
     </mat-card-actions>
   }
 </mat-card>
