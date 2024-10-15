@@ -9,24 +9,24 @@ import {
 import { GamesStore } from './games.store';
 import { computed, inject } from '@angular/core';
 import { GameListsStore } from './game-lists.store';
-import { Friend, User } from '../model/users.interfaces';
+import { User } from '../model/users.interfaces';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
-import { GameList } from '../model/games.interfaces';
-import { MatChipInputEvent } from '@angular/material/chips';
 
 type UserState = {
   userFromApi: User | null;
+  gameListGroups: string[];
 };
 
 const initialState: UserState = {
   userFromApi: null,
+  gameListGroups: [],
 };
 
 export const UserStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withEntities({ entity: type<User>(), collection: 'friends' }),
-  withComputed(({ userFromApi }) => {
+  withComputed(({ userFromApi, gameListGroups }) => {
     const gamesStore = inject(GamesStore);
     const gameListsStore = inject(GameListsStore);
 
@@ -39,6 +39,7 @@ export const UserStore = signalStore(
             ...localUser,
             games: gamesStore.entities(),
             gameLists: gameListsStore.entities(),
+            gameListGroups: gameListGroups(),
           };
         }
 
@@ -55,30 +56,21 @@ export const UserStore = signalStore(
     setFriends(friends: User[]): void {
       patchState(store, setAllEntities(friends, { collection: 'friends' }));
     },
-    addGameListGroup(event: MatChipInputEvent): void {
-      if (!store.userFromApi) return;
-
-      const name = (event.value || '').trim();
-
+    setGameListGroups(gameListGroups: string[]): void {
+      patchState(store, () => ({
+        gameListGroups,
+      }));
+    },
+    addGameListGroup(name: string): void {
       patchState(store, (state) => ({
-        userFromApi: {
-          ...state.userFromApi!,
-          gameListGroups: [...state.userFromApi!.gameListGroups, name],
-        },
+        gameListGroups: [...state.gameListGroups, name],
       }));
     },
     removeGameListGroup(name: string): void {
-      if (!store.userFromApi) return;
-
       patchState(store, (state) => ({
-        userFromApi: {
-          ...state.userFromApi!,
-          gameListGroups: [
-            ...state.userFromApi!.gameListGroups.filter(
-              (group) => group !== name
-            ),
-          ],
-        },
+        gameListGroups: [
+          ...state.gameListGroups.filter((group) => group !== name),
+        ],
       }));
     },
   }))

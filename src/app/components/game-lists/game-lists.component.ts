@@ -15,7 +15,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { JsonPipe } from '@angular/common';
 import { UserService } from '../../services/users.service';
 import { UserStore } from '../../store/user.store';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { ListGroupSelectComponent } from '../list-group-select/list-group-select.component';
 
 @Component({
   selector: 'app-game-lists',
@@ -33,7 +34,7 @@ import { MatChipsModule } from '@angular/material/chips';
     ScrollingModule,
     MatButtonToggleModule,
     JsonPipe,
-    MatChipsModule,
+    ListGroupSelectComponent,
   ],
   templateUrl: './game-lists.component.html',
   styleUrl: './game-lists.component.scss',
@@ -46,14 +47,28 @@ export class GameListsComponent {
   userService = inject(UserService);
   userStore = inject(UserStore);
   newListName = '';
-  newListGroupName = '';
   detailView = signal(false);
   scrollView = signal(true);
+  selectedListGroup = signal('all');
   listsToDisplay = computed(() => {
     if (this.friendId()) {
-      return this.userStore.friendsEntityMap()[this.friendId()].gameLists;
+      if (this.selectedListGroup() === 'all') {
+        return this.userStore.friendsEntityMap()[this.friendId()].gameLists;
+      }
+
+      return this.userStore
+        .friendsEntityMap()
+        [this.friendId()].gameLists.filter((list) =>
+          list.groups.includes(this.selectedListGroup())
+        );
     } else if (this.userId()) {
-      return this.gameListsStore.entities();
+      if (this.selectedListGroup() === 'all') {
+        return this.gameListsStore.entities();
+      }
+
+      return this.gameListsStore
+        .entities()
+        .filter((list) => list.groups.includes(this.selectedListGroup()));
     } else return [];
   });
   listOwner = computed(() => {
@@ -75,16 +90,22 @@ export class GameListsComponent {
     });
   }
 
-  // addListGroup(): void {
-  //   if (!this.editable()) return;
+  addListGroup(name: string): void {
+    if (!this.editable()) return;
 
-  //   if (this.userStore.user()) {
-  //     this.userStore.addGameListGroup(this.newListGroupName);
-  //     this.userService.updateUser({
-  //       gameListGroups: this.userStore.user()!.gameListGroups,
-  //     });
-  //   }
-  // }
+    if (this.userStore.user()) {
+      this.userStore.addGameListGroup(name);
+      this.userService.updateUser({
+        gameListGroups: this.userStore.user()!.gameListGroups,
+      });
+    }
+  }
+
+  deleteListGroup(name: string): void {
+    if (!this.editable()) return;
+
+    this.userService.removeGameListGroup(name);
+  }
 
   toggleDetailView(): void {
     this.detailView.set(!this.detailView());
@@ -93,12 +114,4 @@ export class GameListsComponent {
   listTrackBy(index: number, list: GameList): string {
     return list.id;
   }
-
-  // addGameListGroup(name: string) {
-  //   this.userService.addGameListGroup(name);
-  // }
-
-  // removeGameListGroup(name: string): void {
-  //   this.userService.removeGameListGroup(name);
-  // }
 }

@@ -16,20 +16,7 @@
         }
       </mat-form-field>
       <button mat-button type="submit" [disabled]="!newListName" (click)="addList()">Create new list</button>
-      <!-- <mat-form-field >
-        <mat-label>Create new list group</mat-label>
-        <input matInput type="text" [(ngModel)]="newListGroupName" name="newListGroupName">
-        @if (newListName) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="newListGroupName=''">
-            <mat-icon>close</mat-icon>
-          </button>
-        }
-      </mat-form-field>
-      <button mat-button type="submit" [disabled]="!newListGroupName" (click)="addListGroup()">Create new list</button> -->
     }
-    <!-- @for (listGroup of userService.user()?.gameListGroups; track listGroup) {
-      <p>{{ listGroup }}</p>
-    } -->
     <mat-button-toggle-group>
       <mat-button-toggle (click)="detailView.set(false)" [checked]="detailView() === false">
         Simple
@@ -43,30 +30,7 @@
       <mat-button-toggle value="Full" (click)="scrollView.set(false)" [checked]="scrollView() === false">Full</mat-button-toggle>
     </mat-button-toggle-group>
   </div>
-  <!-- <section>
-    <h4>Chips inside of a Template-driven form</h4>
-    <mat-form-field class="example-form-field">
-      <mat-label>Video keywords</mat-label>
-      <mat-chip-grid #templateChipGrid aria-label="Enter template form keywords" [ngModel]="listOwner().gameListGroups">
-      @for (listGroup of userService.user()?.gameListGroups; track listGroup) {
-        <mat-chip-row (removed)="removeGameListGroup(listGroup)">
-          {{ listGroup }}
-        <button matChipRemove aria-label="'remove template form' + keyword">
-          <mat-icon>cancel</mat-icon>
-        </button>
-        </mat-chip-row>
-      }
-      </mat-chip-grid>
-      <input
-        placeholder="New keyword..."
-        [matChipInputFor]="templateChipGrid"
-        (matChipInputTokenEnd)="addGameListGroup($event)"
-      />
-    </mat-form-field>
-  </section> -->
-
-
-
+  <app-list-group-select (listGroupSelected)="selectedListGroup.set($event)" (listGroupAdded)="addListGroup($event)" (listGroupDeleted)="deleteListGroup($event)"/>
   <cdk-virtual-scroll-viewport appendOnly itemSize="10" class="lists-scroll-viewport">
     <div class="lists">
       <app-game-list
@@ -78,7 +42,6 @@
         [listOwner]="listOwner()"
         [editable]="editable()"
         [scrollView]="scrollView()"/>
-
     </div>
   </cdk-virtual-scroll-viewport>
 </div>

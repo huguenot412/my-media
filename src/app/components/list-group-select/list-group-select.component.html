@@ -1,0 +1,32 @@
+
+  @if (mode() === 'add') {
+  <mat-form-field class="list-select">
+    <mat-label>
+      {{ mode() | titlecase }} list group
+    </mat-label>
+    <input matInput type="text" [(ngModel)]="listGroupName" name="newListGroupName" (keydown.enter)="handleGroupSelection()">
+    @if (listGroupName()) {
+      <button matSuffix mat-icon-button aria-label="Clear" (click)="listGroupName.set('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+  } @else {
+  <mat-form-field>
+    <mat-label>
+      {{ mode() | titlecase }} list group
+    </mat-label>
+    <mat-select [(ngModel)]="listGroupName" (selectionChange)="handleGroupSelection()">
+      <mat-option value="all" selected>All</mat-option>
+      @for (list of listGroups(); track list) {
+        <mat-option [value]="list">{{ list }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  }
+
+<mat-button-toggle-group>
+  <mat-button-toggle value="select" (click)="mode.set('select')" [checked]="mode() === 'select'">Select</mat-button-toggle>
+  <mat-button-toggle value="add" (click)="mode.set('add')" [checked]="mode() === 'add'">Add</mat-button-toggle>
+  <mat-button-toggle value="delete" (click)="mode.set('delete')" [checked]="mode() === 'delete'">Delete</mat-button-toggle>
+</mat-button-toggle-group>

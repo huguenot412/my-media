@@ -51,6 +51,7 @@ export class UserService {
 
   setUser(user: User): void {
     this.userStore.setUser(user);
+    this.userStore.setGameListGroups(user.gameListGroups);
     this.getFriendIds()
       .pipe(
         tap((ids) => console.log('friend ids: ', ids)),
@@ -218,23 +219,21 @@ export class UserService {
     };
   }
 
-  // addGameListGroup(name: string): void {
-  //   if (this.userStore.user()) {
-  //     this.userStore.addGameListGroup(name);
-  //     this.updateUser({
-  //       gameListGroups: this.userStore.user()!.gameListGroups,
-  //     });
-  //   }
-  // }
+  addGameListGroup(name: string): void {
+    this.userStore.addGameListGroup(name);
+    this.updateUser({
+      gameListGroups: this.userStore.gameListGroups(),
+    });
+  }
 
-  // removeGameListGroup(name: string): void {
-  //   if (this.userStore.user()) {
-  //     this.userStore.removeGameListGroup(name);
-  //     this.updateUser({
-  //       gameListGroups: this.userStore.user()!.gameListGroups,
-  //     });
-  //   }
-  // }
+  removeGameListGroup(name: string): void {
+    this.userStore.removeGameListGroup(name);
+    this.updateUser({
+      gameListGroups: this.userStore.gameListGroups(),
+    });
+
+    console.log(this.userStore.gameListGroups());
+  }
 
   private createDefaultGameLists(): GameList[] {
     const listNames = ['Playing', 'Backlog', 'Played'];
