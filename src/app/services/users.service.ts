@@ -101,6 +101,7 @@ export class UserService {
       username,
       games: [],
       gameLists: this.createDefaultGameLists(),
+      gameListGroups: [],
     };
 
     addDoc(collection(this.firestore, 'users'), user);
@@ -216,6 +217,24 @@ export class UserService {
       groups: [],
     };
   }
+
+  // addGameListGroup(name: string): void {
+  //   if (this.userStore.user()) {
+  //     this.userStore.addGameListGroup(name);
+  //     this.updateUser({
+  //       gameListGroups: this.userStore.user()!.gameListGroups,
+  //     });
+  //   }
+  // }
+
+  // removeGameListGroup(name: string): void {
+  //   if (this.userStore.user()) {
+  //     this.userStore.removeGameListGroup(name);
+  //     this.updateUser({
+  //       gameListGroups: this.userStore.user()!.gameListGroups,
+  //     });
+  //   }
+  // }
 
   private createDefaultGameLists(): GameList[] {
     const listNames = ['Playing', 'Backlog', 'Played'];
