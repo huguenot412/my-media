@@ -11,6 +11,7 @@ import { computed, inject } from '@angular/core';
 import { GameListsStore } from './game-lists.store';
 import { Friend, User } from '../model/users.interfaces';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
+import { GameList } from '../model/games.interfaces';
 
 type UserState = {
   userFromApi: User | null;

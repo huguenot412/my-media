@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  Input,
-  input,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameListsStore } from '../../store/game-lists.store';
 import { GameList } from '../../model/games.interfaces';
@@ -22,7 +15,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { JsonPipe } from '@angular/common';
 import { UserService } from '../../services/users.service';
 import { UserStore } from '../../store/user.store';
-import { User } from '../../model/users.interfaces';
 
 @Component({
   selector: 'app-game-lists',
@@ -72,21 +64,10 @@ export class GameListsComponent {
   addList(name: string): void {
     if (!this.editable()) return;
 
-    const list: GameList = {
-      name,
-      id: name.toLowerCase(),
-      type: 'user',
-      ranked: false,
-      games: [],
-    };
-
-    this.gameListsStore.addList(list);
-
-    const update: Partial<User> = {
+    this.gameListsStore.addList(this.userService.createGameList(name, 'user'));
+    this.userService.updateUser({
       gameLists: this.gameListsStore.entities(),
-    };
-
-    this.userService.updateUser(update);
+    });
   }
 
   toggleDetailView(): void {

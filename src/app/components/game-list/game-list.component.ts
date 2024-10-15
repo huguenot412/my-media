@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit } from '@angular/core';
 import { GameListsStore } from '../../store/game-lists.store';
 import {
   faGripLinesVertical,
@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../model/users.interfaces';
 import { UserService } from '../../services/users.service';
 import { UserStore } from '../../store/user.store';
-import { JsonPipe } from '@angular/common';
+import { DatePipe, JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-game-list',
@@ -36,12 +36,14 @@ import { JsonPipe } from '@angular/common';
     MatButtonToggleModule,
     FormsModule,
     JsonPipe,
+    DatePipe,
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.scss',
 })
-export class GameListComponent {
+export class GameListComponent implements OnInit {
   list = input.required<GameList>();
+  testList!: GameList;
   listOwner = input.required<User>();
   editable = input(true);
   gameListsStore = inject(GameListsStore);
@@ -59,6 +61,14 @@ export class GameListComponent {
         this.listOwner().games.find((game) => game.id === gameId) as UserGame
     );
   });
+
+  ngOnInit(): void {
+    this.testList = this.list();
+  }
+
+  trimTimestamp(date: string): string {
+    return date.replace(/^"|"$/g, '');
+  }
 
   setRankedView(ranked: boolean): void {
     if (!this.editable()) return;

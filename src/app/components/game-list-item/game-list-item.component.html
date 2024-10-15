@@ -6,12 +6,12 @@
             <p class="rank">{{ rank() }}</p>
         }
         <div class="cover-art-container">
-          <img class="cover-art" [ngSrc]="game().cover.url!" alt="Cover Art" fill>
+          <img class="cover-art" [ngSrc]="game().cover.url!.replace('t_thumb', 't_cover_small')" alt="Cover Art" fill>
         </div>
         <p>{{ game().name }}</p>
 
       </div>
-      <fa-icon class="info-icon" [icon]="faCircleInfo" [routerLink]="['../game', game().id]"/>
+      <fa-icon class="info-icon" [icon]="faCircleInfo" [routerLink]="['/game', game().id]"/>
 
       @if (editable()) {
         <fa-icon

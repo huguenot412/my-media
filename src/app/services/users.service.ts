@@ -12,14 +12,13 @@ import {
   where,
 } from '@angular/fire/firestore';
 import {
-  Friend,
   FriendRequest,
   ProtoUser,
   User,
   UserConfig,
 } from '../model/users.interfaces';
 import { UserStore } from '../store/user.store';
-import { GameList } from '../model/games.interfaces';
+import { GameList, GameListType } from '../model/games.interfaces';
 import { GameListsStore } from '../store/game-lists.store';
 import { GamesStore } from '../store/games.store';
 
@@ -206,16 +205,22 @@ export class UserService {
     return this.friendIds$;
   }
 
+  createGameList(name: string, type: GameListType): GameList {
+    return {
+      name,
+      id: name.toLowerCase(),
+      type,
+      ranked: false,
+      games: [],
+      lastUpdated: JSON.stringify(new Date()),
+      groups: [],
+    };
+  }
+
   private createDefaultGameLists(): GameList[] {
     const listNames = ['Playing', 'Backlog', 'Played'];
 
-    return listNames.map((name) => ({
-      name,
-      id: name.toLowerCase(),
-      type: 'default',
-      ranked: false,
-      games: [],
-    }));
+    return listNames.map((name) => this.createGameList(name, 'default'));
   }
 
   private createFriendRequest(
