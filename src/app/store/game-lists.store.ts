@@ -57,7 +57,10 @@ export const GameListsStore = signalStore(
           store,
           updateEntity({
             id: listId,
-            changes: { games: [...store.entityMap()[listId].games, gameId] },
+            changes: {
+              games: [...store.entityMap()[listId].games, gameId],
+              lastUpdated: JSON.stringify(new Date()),
+            },
           })
         );
       },
@@ -65,7 +68,13 @@ export const GameListsStore = signalStore(
       updateListGames(listId: string, gameIds: number[]): void {
         patchState(
           store,
-          updateEntity({ id: listId, changes: { games: gameIds } })
+          updateEntity({
+            id: listId,
+            changes: {
+              games: gameIds,
+              lastUpdated: JSON.stringify(new Date()),
+            },
+          })
         );
       },
       removeGameFromList(listId: string, gameId: number): void {
@@ -79,6 +88,7 @@ export const GameListsStore = signalStore(
             id: listId,
             changes: {
               games,
+              lastUpdated: JSON.stringify(new Date()),
             },
           })
         );
@@ -90,6 +100,7 @@ export const GameListsStore = signalStore(
             id,
             changes: {
               ranked,
+              lastUpdated: JSON.stringify(new Date()),
             },
           })
         );

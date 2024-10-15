@@ -2,7 +2,12 @@
 <mat-card class="list">
   <mat-card-header class="list-header">
     <mat-card-title>
-      <p>{{ list().name }}</p>
+      <p class="list-name">{{ list().name }}</p>
+      @let lastUpdated = list().lastUpdated;
+
+      @if (lastUpdated) {
+        <p class="timestamp">Last updated: {{ trimTimestamp(list().lastUpdated) | date }}</p>
+      }
     </mat-card-title>
     @if (list().type == 'user') {
       <fa-icon class="trash" [icon]="faTrash" (click)="deleteList(list().id)" />

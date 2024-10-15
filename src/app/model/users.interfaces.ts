@@ -12,6 +12,7 @@ export interface ProtoUser {
   username: string;
   games: UserGame[];
   gameLists: GameList[];
+  gameListGroups: string[];
 }
 
 export interface User extends ProtoUser {

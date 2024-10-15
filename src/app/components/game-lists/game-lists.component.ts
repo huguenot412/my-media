@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  Input,
-  input,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameListsStore } from '../../store/game-lists.store';
 import { GameList } from '../../model/games.interfaces';
@@ -22,7 +15,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { JsonPipe } from '@angular/common';
 import { UserService } from '../../services/users.service';
 import { UserStore } from '../../store/user.store';
-import { User } from '../../model/users.interfaces';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-game-lists',
@@ -40,6 +33,7 @@ import { User } from '../../model/users.interfaces';
     ScrollingModule,
     MatButtonToggleModule,
     JsonPipe,
+    MatChipsModule,
   ],
   templateUrl: './game-lists.component.html',
   styleUrl: './game-lists.component.scss',
@@ -52,6 +46,7 @@ export class GameListsComponent {
   userService = inject(UserService);
   userStore = inject(UserStore);
   newListName = '';
+  newListGroupName = '';
   detailView = signal(false);
   scrollView = signal(true);
   listsToDisplay = computed(() => {
@@ -69,25 +64,27 @@ export class GameListsComponent {
     }
   });
 
-  addList(name: string): void {
+  addList(): void {
     if (!this.editable()) return;
 
-    const list: GameList = {
-      name,
-      id: name.toLowerCase(),
-      type: 'user',
-      ranked: false,
-      games: [],
-    };
-
-    this.gameListsStore.addList(list);
-
-    const update: Partial<User> = {
+    this.gameListsStore.addList(
+      this.userService.createGameList(this.newListName, 'user')
+    );
+    this.userService.updateUser({
       gameLists: this.gameListsStore.entities(),
-    };
-
-    this.userService.updateUser(update);
+    });
   }
+
+  // addListGroup(): void {
+  //   if (!this.editable()) return;
+
+  //   if (this.userStore.user()) {
+  //     this.userStore.addGameListGroup(this.newListGroupName);
+  //     this.userService.updateUser({
+  //       gameListGroups: this.userStore.user()!.gameListGroups,
+  //     });
+  //   }
+  // }
 
   toggleDetailView(): void {
     this.detailView.set(!this.detailView());
@@ -96,4 +93,12 @@ export class GameListsComponent {
   listTrackBy(index: number, list: GameList): string {
     return list.id;
   }
+
+  // addGameListGroup(name: string) {
+  //   this.userService.addGameListGroup(name);
+  // }
+
+  // removeGameListGroup(name: string): void {
+  //   this.userService.removeGameListGroup(name);
+  // }
 }
