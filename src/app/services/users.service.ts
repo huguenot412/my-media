@@ -231,8 +231,20 @@ export class UserService {
     this.updateUser({
       gameListGroups: this.userStore.gameListGroups(),
     });
+  }
 
-    console.log(this.userStore.gameListGroups());
+  addGroupTagToList(listId: string, name: string): void {
+    this.gameListsStore.addGroupTag(listId, name);
+    this.updateUser({
+      gameLists: this.userStore.user()?.gameLists,
+    });
+  }
+
+  removeGroupTagFromList(listId: string, name: string): void {
+    this.gameListsStore.removeGroupTag(listId, name);
+    this.updateUser({
+      gameLists: this.userStore.user()?.gameLists,
+    });
   }
 
   private createDefaultGameLists(): GameList[] {

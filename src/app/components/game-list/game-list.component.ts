@@ -22,6 +22,7 @@ import { User } from '../../model/users.interfaces';
 import { UserService } from '../../services/users.service';
 import { UserStore } from '../../store/user.store';
 import { DatePipe, JsonPipe } from '@angular/common';
+import { ListGroupSelectComponent } from '../list-group-select/list-group-select.component';
 
 @Component({
   selector: 'app-game-list',
@@ -37,6 +38,7 @@ import { DatePipe, JsonPipe } from '@angular/common';
     FormsModule,
     JsonPipe,
     DatePipe,
+    ListGroupSelectComponent,
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.scss',
@@ -106,6 +108,16 @@ export class GameListComponent implements OnInit {
     };
 
     this.userService.updateUser(update);
+  }
+
+  addListGroup(name: string): void {
+    this.userService.addGroupTagToList(this.list().id, name);
+  }
+
+  removeListGroup(name: string): void {
+    setTimeout(() => {
+      this.userService.removeGroupTagFromList(this.list().id, name);
+    }, 100);
   }
 
   gamesTrackBy(index: number, game: UserGame): number {

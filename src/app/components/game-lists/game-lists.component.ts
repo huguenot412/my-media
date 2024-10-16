@@ -90,7 +90,7 @@ export class GameListsComponent {
     });
   }
 
-  addListGroup(name: string): void {
+  createListGroup(name: string): void {
     if (!this.editable()) return;
 
     if (this.userStore.user()) {

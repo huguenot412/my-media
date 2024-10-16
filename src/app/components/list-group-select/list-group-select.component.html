@@ -1,5 +1,5 @@
 
-  @if (mode() === 'add') {
+  @if (mode() === 'create') {
   <mat-form-field class="list-select">
     <mat-label>
       {{ mode() | titlecase }} list group
@@ -26,7 +26,14 @@
   }
 
 <mat-button-toggle-group>
-  <mat-button-toggle value="select" (click)="mode.set('select')" [checked]="mode() === 'select'">Select</mat-button-toggle>
-  <mat-button-toggle value="add" (click)="mode.set('add')" [checked]="mode() === 'add'">Add</mat-button-toggle>
-  <mat-button-toggle value="delete" (click)="mode.set('delete')" [checked]="mode() === 'delete'">Delete</mat-button-toggle>
+  @if (usage() === 'create') {
+    <mat-button-toggle value="select" (click)="mode.set('select')" [checked]="mode() === 'select'">Select</mat-button-toggle>
+    <mat-button-toggle value="create" (click)="mode.set('create')" [checked]="mode() === 'create'">Create</mat-button-toggle>
+    <mat-button-toggle value="delete" (click)="mode.set('delete')" [checked]="mode() === 'delete'">Delete</mat-button-toggle>
+  }
+
+  @if (usage() === 'assign') {
+    <mat-button-toggle value="add" (click)="mode.set('add')" [checked]="mode() === 'add'">Add</mat-button-toggle>
+    <mat-button-toggle value="remove" (click)="mode.set('remove')" [checked]="mode() === 'remove'">Remove</mat-button-toggle>
+  }
 </mat-button-toggle-group>

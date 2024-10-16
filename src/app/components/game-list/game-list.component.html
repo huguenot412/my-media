@@ -54,14 +54,29 @@
       <p>No games currently in list</p>
     }
   </mat-card-content>
-  @if (editable() && detailView()) {
-    <mat-card-actions class="actions">
-      <div class="toggles">
+  <mat-card-footer>
+    @if (editable() && detailView()) {
+      <mat-card-actions class="actions">
+        <p>List settings:</p>
+        <div class="toggles">
           <mat-button-toggle-group>
             <mat-button-toggle value="unranked" (click)="setRankedView(false)" [checked]="rankedView() === false">Unranked</mat-button-toggle>
             <mat-button-toggle value="ranked" (click)="setRankedView(true)" [checked]="rankedView() === true">Ranked</mat-button-toggle>
           </mat-button-toggle-group>
+
         </div>
-    </mat-card-actions>
-  }
+        <app-list-group-select
+            usage="assign"
+            (listGroupAdded)="addListGroup($event)"
+            (listGroupRemoved)="removeListGroup($event)"/>
+      </mat-card-actions>
+    }
+    <p>List Groups:</p>
+    <ul>
+      @for (group of list().groups; track group) {
+        <li>{{ group }}</li>
+      }
+    </ul>
+  </mat-card-footer>
+
 </mat-card>

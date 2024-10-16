@@ -105,6 +105,32 @@ export const GameListsStore = signalStore(
           })
         );
       },
+      addGroupTag(listId: string, name: string): void {
+        patchState(
+          store,
+          updateEntity({
+            id: listId,
+            changes: {
+              groups: [...store.entityMap()[listId].groups, name],
+            },
+          })
+        );
+      },
+      removeGroupTag(listId: string, name: string): void {
+        patchState(
+          store,
+          updateEntity({
+            id: listId,
+            changes: {
+              groups: [
+                ...store
+                  .entityMap()
+                  [listId].groups.filter((group) => group !== name),
+              ],
+            },
+          })
+        );
+      },
     };
   })
 );

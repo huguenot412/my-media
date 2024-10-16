@@ -30,7 +30,11 @@
       <mat-button-toggle value="Full" (click)="scrollView.set(false)" [checked]="scrollView() === false">Full</mat-button-toggle>
     </mat-button-toggle-group>
   </div>
-  <app-list-group-select (listGroupSelected)="selectedListGroup.set($event)" (listGroupAdded)="addListGroup($event)" (listGroupDeleted)="deleteListGroup($event)"/>
+  <app-list-group-select
+    usage="create"
+    (listGroupSelected)="selectedListGroup.set($event)"
+    (listGroupCreated)="createListGroup($event)"
+    (listGroupDeleted)="deleteListGroup($event)"/>
   <cdk-virtual-scroll-viewport appendOnly itemSize="10" class="lists-scroll-viewport">
     <div class="lists">
       <app-game-list

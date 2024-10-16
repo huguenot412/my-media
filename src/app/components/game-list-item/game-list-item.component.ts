@@ -28,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { ListSelectComponent } from '../list-select/list-select.component';
 import { GamesService } from '../../services/games.service';
+import { ListGroupSelectComponent } from '../list-group-select/list-group-select.component';
 
 @Component({
   selector: 'app-game-list-item',
